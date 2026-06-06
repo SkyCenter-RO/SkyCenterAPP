@@ -1,0 +1,32 @@
+# Dependencies
+/vendor
+/node_modules
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# Laravel runtime
+/storage/*.key
+/bootstrap/cache/*
+/public/storage
+/public/hot
+
+# Local DB / data
+*.sqlite
+database/database.sqlite
+
+# Build / test artifacts
+/public/build
+/test-results
+.phpunit.result.cache
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea
+.vscode
+
+# Claude local settings
+.claude/settings.local.json
