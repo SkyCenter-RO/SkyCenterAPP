@@ -49,4 +49,30 @@ class PanelAccessTest extends TestCase
     {
         $this->get('/admin/login')->assertSuccessful();
     }
+
+    public function test_guest_is_redirected_to_login(): void
+    {
+        $this->get('/admin')->assertRedirect('/admin/login');
+    }
+
+    public function test_active_admin_can_open_panel_home(): void
+    {
+        $user = User::factory()->create(['role' => User::ROLE_ADMIN, 'is_active' => true]);
+
+        $this->actingAs($user)->get('/admin')->assertSuccessful();
+    }
+
+    public function test_active_operator_can_open_panel_home(): void
+    {
+        $user = User::factory()->create(['role' => User::ROLE_OPERATOR, 'is_active' => true]);
+
+        $this->actingAs($user)->get('/admin')->assertSuccessful();
+    }
+
+    public function test_inactive_user_is_denied_panel_home(): void
+    {
+        $user = User::factory()->create(['role' => User::ROLE_ADMIN, 'is_active' => false]);
+
+        $this->actingAs($user)->get('/admin')->assertForbidden();
+    }
 }
