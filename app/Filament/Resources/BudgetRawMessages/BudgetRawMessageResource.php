@@ -8,6 +8,7 @@ use App\Filament\Resources\BudgetRawMessages\Pages\ListBudgetRawMessages;
 use App\Filament\Resources\BudgetRawMessages\Schemas\BudgetRawMessageForm;
 use App\Filament\Resources\BudgetRawMessages\Tables\BudgetRawMessagesTable;
 use App\Models\BudgetRawMessage;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
@@ -29,6 +30,13 @@ class BudgetRawMessageResource extends Resource
     protected static ?string $slug = 'buget-mesaje';
 
     protected static ?int $navigationSort = 3;
+
+    public static function canAccess(): bool
+    {
+        $user = Filament::auth()->user();
+
+        return $user instanceof \App\Models\User && $user->isAdmin();
+    }
 
     public static function form(Schema $schema): Schema
     {

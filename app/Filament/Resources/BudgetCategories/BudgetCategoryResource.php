@@ -8,6 +8,7 @@ use App\Filament\Resources\BudgetCategories\Pages\ListBudgetCategories;
 use App\Filament\Resources\BudgetCategories\Schemas\BudgetCategoryForm;
 use App\Filament\Resources\BudgetCategories\Tables\BudgetCategoriesTable;
 use App\Models\BudgetCategory;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
@@ -29,6 +30,13 @@ class BudgetCategoryResource extends Resource
     protected static ?string $slug = 'buget-categorii';
 
     protected static ?int $navigationSort = 1;
+
+    public static function canAccess(): bool
+    {
+        $user = Filament::auth()->user();
+
+        return $user instanceof \App\Models\User && $user->isAdmin();
+    }
 
     public static function form(Schema $schema): Schema
     {

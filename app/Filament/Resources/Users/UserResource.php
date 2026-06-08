@@ -8,6 +8,7 @@ use App\Filament\Resources\Users\Pages\ListUsers;
 use App\Filament\Resources\Users\Schemas\UserForm;
 use App\Filament\Resources\Users\Tables\UsersTable;
 use App\Models\User;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
@@ -29,6 +30,13 @@ class UserResource extends Resource
     protected static ?string $slug = 'sistem-utilizatori';
 
     protected static ?int $navigationSort = 5;
+
+    public static function canAccess(): bool
+    {
+        $user = Filament::auth()->user();
+
+        return $user instanceof \App\Models\User && $user->isAdmin();
+    }
 
     public static function form(Schema $schema): Schema
     {

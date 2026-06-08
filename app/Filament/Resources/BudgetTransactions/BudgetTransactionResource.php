@@ -8,6 +8,7 @@ use App\Filament\Resources\BudgetTransactions\Pages\ListBudgetTransactions;
 use App\Filament\Resources\BudgetTransactions\Schemas\BudgetTransactionForm;
 use App\Filament\Resources\BudgetTransactions\Tables\BudgetTransactionsTable;
 use App\Models\BudgetTransaction;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
@@ -29,6 +30,13 @@ class BudgetTransactionResource extends Resource
     protected static ?string $slug = 'buget-tranzactii';
 
     protected static ?int $navigationSort = 2;
+
+    public static function canAccess(): bool
+    {
+        $user = Filament::auth()->user();
+
+        return $user instanceof \App\Models\User && $user->isAdmin();
+    }
 
     public static function form(Schema $schema): Schema
     {

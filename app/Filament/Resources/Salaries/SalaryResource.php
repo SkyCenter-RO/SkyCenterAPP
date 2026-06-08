@@ -8,6 +8,7 @@ use App\Filament\Resources\Salaries\Pages\ListSalaries;
 use App\Filament\Resources\Salaries\Schemas\SalaryForm;
 use App\Filament\Resources\Salaries\Tables\SalariesTable;
 use App\Models\Salary;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
@@ -29,6 +30,13 @@ class SalaryResource extends Resource
     protected static ?string $slug = 'buget-salarii';
 
     protected static ?int $navigationSort = 4;
+
+    public static function canAccess(): bool
+    {
+        $user = Filament::auth()->user();
+
+        return $user instanceof \App\Models\User && $user->isAdmin();
+    }
 
     public static function form(Schema $schema): Schema
     {
