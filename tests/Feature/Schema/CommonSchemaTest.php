@@ -25,4 +25,24 @@ class CommonSchemaTest extends TestCase
             'role' => 'wizard', 'is_active' => true,
         ]);
     }
+
+    public function test_messaging_tables_exist(): void
+    {
+        $this->assertTrue(Schema::hasColumns('message_templates', ['template_key', 'channel', 'body', 'is_active']));
+        $this->assertTrue(Schema::hasColumns('outbound_messages', ['channel', 'scheduled_at', 'status']));
+    }
+
+    public function test_outbound_message_status_check_rejects_invalid_value(): void
+    {
+        $this->expectException(\Illuminate\Database\QueryException::class);
+        DB::table('outbound_messages')->insert([
+            'service' => 'parking', 'channel' => 'whatsapp', 'scheduled_at' => now(), 'status' => 'exploded',
+        ]);
+    }
+
+    public function test_automation_tables_exist(): void
+    {
+        $this->assertTrue(Schema::hasColumns('automation_webhook_logs', ['endpoint', 'status', 'payload']));
+        $this->assertTrue(Schema::hasColumns('automation_events', ['event_type', 'status', 'payload']));
+    }
 }
