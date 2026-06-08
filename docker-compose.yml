@@ -31,6 +31,7 @@ services:
       - "${FORWARD_DB_PORT:-55433}:5432"
     volumes:
       - pgsql-data:/var/lib/postgresql/data
+      - ./docker/postgres/init-test-database.sh:/docker-entrypoint-initdb.d/10-init-test-database.sh:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-skycenter} -d ${DB_DATABASE:-skycenter_app}"]
       interval: 5s

@@ -26,7 +26,7 @@
         <env name="DB_CONNECTION" value="pgsql"/>
         <env name="DB_HOST" value="pgsql"/>
         <env name="DB_PORT" value="5432"/>
-        <env name="DB_DATABASE" value="skycenter_app_test"/>
+        <server name="DB_DATABASE" value="skycenter_app_test" force="true"/>
         <env name="DB_USERNAME" value="skycenter"/>
         <env name="DB_PASSWORD" value="secret"/>
         <env name="DB_URL" value=""/>
