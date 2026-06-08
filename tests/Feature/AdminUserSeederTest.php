@@ -24,6 +24,44 @@ class AdminUserSeederTest extends TestCase
         $this->assertTrue(Hash::check('schimba-parola', $admin->password));
     }
 
+    public function test_it_uses_the_configured_bootstrap_password(): void
+    {
+        config(['skycenter.bootstrap_admin_password' => 'parola-din-config']);
+
+        $this->seed(AdminUserSeeder::class);
+
+        $admin = User::query()->where('email', 'admin@skycenter.local')->firstOrFail();
+
+        $this->assertTrue(Hash::check('parola-din-config', $admin->password));
+        $this->assertFalse(Hash::check('schimba-parola', $admin->password));
+    }
+
+    public function test_production_rejects_a_missing_bootstrap_password_for_a_new_admin(): void
+    {
+        config([
+            'app.env' => 'production',
+            'skycenter.bootstrap_admin_password' => null,
+        ]);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('ADMIN_BOOTSTRAP_PASSWORD');
+
+        $this->seed(AdminUserSeeder::class);
+    }
+
+    public function test_production_rejects_the_placeholder_password_for_a_new_admin(): void
+    {
+        config([
+            'app.env' => 'production',
+            'skycenter.bootstrap_admin_password' => 'schimba-parola',
+        ]);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('ADMIN_BOOTSTRAP_PASSWORD');
+
+        $this->seed(AdminUserSeeder::class);
+    }
+
     public function test_reseeding_restores_admin_fields_without_resetting_password(): void
     {
         $admin = User::factory()->create([

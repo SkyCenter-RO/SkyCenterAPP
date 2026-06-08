@@ -15,7 +15,19 @@ class AdminUserSeeder extends Seeder
         ]);
 
         if (! $admin->exists) {
-            $admin->password = Hash::make('schimba-parola');
+            $password = config('skycenter.bootstrap_admin_password');
+
+            if (blank($password)) {
+                $password = 'schimba-parola';
+            }
+
+            if (config('app.env') === 'production' && trim((string) $password) === 'schimba-parola') {
+                throw new \RuntimeException(
+                    'ADMIN_BOOTSTRAP_PASSWORD must be set to a non-placeholder value in production.',
+                );
+            }
+
+            $admin->password = Hash::make((string) $password);
         }
 
         $admin->name = 'Administrator';
