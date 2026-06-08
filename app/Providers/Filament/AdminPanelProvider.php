@@ -28,6 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->homeUrl(fn (): string => \App\Filament\Pages\OrdineaDeZi::getUrl(panel: 'admin'))
             ->colors([
                 'primary' => Color::Amber,
             ])
