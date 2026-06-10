@@ -248,6 +248,31 @@ class OrdineaDeZi extends Page
         ];
     }
 
+    /**
+     * @return array{zi:string,noapte:string}
+     */
+    public function getActiveShifts(): array
+    {
+        $date = $this->selectedDate;
+
+        $dayShift = \App\Models\WorkShift::query()
+            ->with('user')
+            ->where('date', $date)
+            ->where('shift_type', 'zi')
+            ->first();
+
+        $nightShift = \App\Models\WorkShift::query()
+            ->with('user')
+            ->where('date', $date)
+            ->where('shift_type', 'noapte')
+            ->first();
+
+        return [
+            'zi' => $dayShift ? ($dayShift->user ? $dayShift->user->name : $dayShift->raw_employee_name) : 'Nealocat',
+            'noapte' => $nightShift ? ($nightShift->user ? $nightShift->user->name : $nightShift->raw_employee_name) : 'Nealocat',
+        ];
+    }
+
     public static function canAccess(): bool
     {
         $user = Filament::auth()->user();
