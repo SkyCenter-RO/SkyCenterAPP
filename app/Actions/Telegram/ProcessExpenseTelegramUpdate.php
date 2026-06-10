@@ -22,9 +22,11 @@ class ProcessExpenseTelegramUpdate
             ->where('user_id', $userId)
             ->first();
 
+        $expired = false;
         if ($session && $session->isExpired()) {
             $session->delete();
             $session = null;
+            $expired = true;
         }
 
         if (! $session) {
@@ -37,12 +39,8 @@ class ProcessExpenseTelegramUpdate
                 'data'       => [],
                 'expires_at' => now()->addMinutes(30),
             ]);
-            
-            if ($session->wasRecentlyCreated && isset($update['_reset'])) {
-                return $this->categoryPrompt($session, true);
-            }
 
-            return $this->categoryPrompt($session);
+            return $this->categoryPrompt($session, $expired);
         }
 
         $session->expires_at = now()->addMinutes(30);

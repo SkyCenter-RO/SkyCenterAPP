@@ -24,9 +24,11 @@ class ProcessIncomeTelegramUpdate
             ->first();
 
         // Expired or missing session → reset
+        $expired = false;
         if ($session && $session->isExpired()) {
             $session->delete();
             $session = null;
+            $expired = true;
         }
 
         if (! $session) {
@@ -40,12 +42,7 @@ class ProcessIncomeTelegramUpdate
                 'expires_at' => now()->addMinutes(30),
             ]);
 
-            if ($session->wasRecentlyCreated && isset($update['_reset'])) {
-                // Expired reset — announce
-                return $this->selectServicePrompt($session, true);
-            }
-
-            return $this->selectServicePrompt($session);
+            return $this->selectServicePrompt($session, $expired);
         }
 
         // Refresh expiry on every interaction

@@ -112,7 +112,7 @@ class IncomeTelegramWizardTest extends TestCase
         $this->assertDatabaseMissing('telegram_sessions', ['chat_id' => '-100111']);
         $this->assertDatabaseHas('budget_transactions', [
             'type'    => 'income',
-            'service' => 'parking',
+            'service' => 'parcare',
             'amount'  => 250.00,
             'currency' => 'RON',
         ]);
