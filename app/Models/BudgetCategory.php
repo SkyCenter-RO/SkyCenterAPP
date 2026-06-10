@@ -21,4 +21,9 @@ class BudgetCategory extends Model
     {
         return $this->hasMany(BudgetTransaction::class, 'category_id');
     }
+
+    public function getEmojiAttribute(): string
+    {
+        return $this->metadata['emoji'] ?? '📌';
+    }
 }
