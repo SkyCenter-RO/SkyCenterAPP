@@ -13,4 +13,6 @@ Route::middleware('automation.token')->prefix('automation')->group(function (): 
     Route::post('dispatch-review-requests', DispatchReviewRequestsController::class);
     Route::get('outbound-messages', OutboundMessagesController::class);
     Route::post('outbound-messages/{outboundMessage}/callback', OutboundMessageCallbackController::class);
+    Route::post('telegram/income',  \App\Http\Controllers\Api\Automation\TelegramIncomeController::class);
+    Route::post('telegram/expense', \App\Http\Controllers\Api\Automation\TelegramExpenseController::class);
 });

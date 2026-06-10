@@ -14,7 +14,7 @@ class IncomeTelegramWizardTest extends TestCase
     private function incomePost(array $payload): \Illuminate\Testing\TestResponse
     {
         return $this->withHeaders([
-            'Authorization' => 'Bearer ' . config('automation.token'),
+            'Authorization' => 'Bearer ' . config('skycenter.automation_api_token'),
         ])->postJson('/api/automation/telegram/income', $payload);
     }
 
