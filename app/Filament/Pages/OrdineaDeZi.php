@@ -12,6 +12,11 @@ use Carbon\CarbonImmutable;
 use Filament\Facades\Filament;
 use Filament\Pages\Page;
 use Livewire\Attributes\Url;
+use App\Actions\Scheduling\ParseSchedulePdfAction;
+use Filament\Actions\Action;
+use Filament\Forms\Components\FileUpload;
+use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Storage;
 
 class OrdineaDeZi extends Page
 {
@@ -203,10 +208,53 @@ class OrdineaDeZi extends Page
         ];
     }
 
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make('uploadSchedule')
+                ->label('Încarcă Program Ture')
+                ->icon('heroicon-o-document-arrow-up')
+                ->visible(fn () => Filament::auth()->user()?->isAdmin())
+                ->form([
+                    FileUpload::make('schedule_pdf')
+                        ->label('Fișier PDF Program Ture')
+                        ->acceptedFileTypes(['application/pdf'])
+                        ->required()
+                        ->disk('local')
+                        ->directory('temp-schedules'),
+                ])
+                ->action(function (array $data) {
+                    $filePath = Storage::disk('local')->path($data['schedule_pdf']);
+                    
+                    try {
+                        $action = app(ParseSchedulePdfAction::class);
+                        $result = $action->execute($filePath);
+
+                        Notification::make()
+                            ->title('Programul de ture a fost importat cu succes!')
+                            ->body("Au fost importate turele pentru luna: {$result['month_name']} {$result['year']}.")
+                            ->success()
+                            ->send();
+                    } catch (\Throwable $e) {
+                        Notification::make()
+                            ->title('Eroare la importul programului!')
+                            ->body($e->getMessage())
+                            ->danger()
+                            ->send();
+                    } finally {
+                        Storage::disk('local')->delete($data['schedule_pdf']);
+                    }
+                })
+        ];
+    }
+
     public static function canAccess(): bool
     {
         $user = Filament::auth()->user();
+        $panel = Filament::getCurrentPanel();
 
-        return $user instanceof \App\Models\User && $user->canAccessPanel(Filament::getCurrentPanel());
+        return $user instanceof \App\Models\User 
+            && $user->is_active 
+            && ($panel ? $user->canAccessPanel($panel) : $user->hasValidRole());
     }
 }
