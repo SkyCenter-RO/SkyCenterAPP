@@ -18,7 +18,7 @@ class LodgingSchemaTest extends TestCase
         }
         $this->assertTrue(Schema::hasColumns('lodging_reservations', [
             'guest_name', 'phone', 'email', 'status', 'check_in', 'check_out',
-            'nights', 'price', 'direct_price', 'currency', 'source',
+            'nights', 'price', 'direct_price', 'currency', 'source', 'review_request_sent',
         ]));
     }
 
