@@ -45,4 +45,12 @@ class CommonSchemaTest extends TestCase
         $this->assertTrue(Schema::hasColumns('automation_webhook_logs', ['endpoint', 'status', 'payload']));
         $this->assertTrue(Schema::hasColumns('automation_events', ['event_type', 'status', 'payload']));
     }
+
+    public function test_telegram_sessions_table_exists(): void
+    {
+        $this->assertTrue(Schema::hasColumns('telegram_sessions', [
+            'chat_id', 'user_id', 'username', 'group_type',
+            'state', 'data', 'wizard_message_id', 'expires_at',
+        ]));
+    }
 }
