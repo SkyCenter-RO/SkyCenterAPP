@@ -53,4 +53,12 @@ class CommonSchemaTest extends TestCase
             'state', 'data', 'wizard_message_id', 'expires_at',
         ]));
     }
+
+    public function test_work_shifts_table_schema(): void
+    {
+        $this->assertTrue(Schema::hasTable('work_shifts'));
+        $this->assertTrue(Schema::hasColumns('work_shifts', [
+            'id', 'date', 'shift_type', 'user_id', 'raw_employee_name', 'created_at', 'updated_at'
+        ]));
+    }
 }
