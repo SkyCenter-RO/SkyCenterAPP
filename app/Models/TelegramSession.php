@@ -40,7 +40,7 @@ class TelegramSession extends Model
         );
     }
 
-    public function touch(array $merge = []): static
+    public function touchSession(array $merge = []): static
     {
         $this->fill(array_merge(['expires_at' => now()->addMinutes(30)], $merge));
         $this->save();
