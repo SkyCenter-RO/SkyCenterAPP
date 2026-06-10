@@ -29,4 +29,25 @@ class SeederTest extends TestCase
         $this->assertDatabaseHas('lodging_properties', ['name' => 'Serafim']);
         $this->assertSame(12, DB::table('rooms')->count()); // 7 + 5
     }
+
+    public function test_seeds_four_message_templates(): void
+    {
+        $this->seed(\Database\Seeders\MessageTemplateSeeder::class);
+
+        $this->assertSame(4, DB::table('message_templates')->count());
+
+        foreach ([
+            ['service' => 'parking', 'template_key' => 'confirmation'],
+            ['service' => 'lodging', 'template_key' => 'confirmation'],
+            ['service' => 'parking', 'template_key' => 'review_request'],
+            ['service' => 'lodging', 'template_key' => 'review_request'],
+        ] as $expected) {
+            $this->assertDatabaseHas('message_templates', $expected + [
+                'source' => 'manual',
+                'locale' => 'ro',
+                'channel' => 'whatsapp',
+                'is_active' => true,
+            ]);
+        }
+    }
 }
