@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             LodgingReferenceSeeder::class,
             MessageTemplateSeeder::class,
             BudgetCategorySeeder::class,
+            OperatorUserSeeder::class,
         ]);
     }
 }
