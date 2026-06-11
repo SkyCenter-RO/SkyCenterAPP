@@ -174,4 +174,44 @@ class ExpenseTelegramWizardTest extends TestCase
         $res->assertOk();
         $this->assertDatabaseHas('budget_transactions', ['amount' => 151.20]);
     }
+
+    public function test_callback_query_stores_wizard_message_id_for_expense(): void
+    {
+        $this->expensePost($this->msg('start')); // creates session
+        $res = $this->expensePost($this->cb('category:custom')); // callback_query with message_id=50
+        $res->assertOk();
+
+        $session = TelegramSession::first();
+        $this->assertEquals(50, $session->wizard_message_id);
+    }
+
+    public function test_category_selection_returns_edit_action(): void
+    {
+        $cat = \App\Models\BudgetCategory::create([
+            'service' => 'general', 'name' => 'Test Cat', 'kind' => 'expense',
+            'frequency' => 'once', 'emoji' => '🧪', 'is_active' => true,
+        ]);
+
+        $this->expensePost($this->msg('start'));
+        $res = $this->expensePost($this->cb("category:{$cat->id}"));
+        $res->assertOk();
+        $this->assertEquals('edit', $res->json('action'));
+        $this->assertEquals(50, $res->json('message_id'));
+    }
+
+    public function test_amount_input_after_callback_returns_edit_action(): void
+    {
+        $cat = \App\Models\BudgetCategory::create([
+            'service' => 'general', 'name' => 'Test Cat', 'kind' => 'expense',
+            'frequency' => 'once', 'emoji' => '🧪', 'is_active' => true,
+        ]);
+
+        $this->expensePost($this->msg('start'));
+        $this->expensePost($this->cb("category:{$cat->id}")); // sets wizard_message_id=50
+        $res = $this->expensePost($this->msg('300'));           // text update — still retains wizard_message_id
+        $res->assertOk();
+        // Final save always returns 'send' (session deleted, clean confirmation)
+        $this->assertEquals('send', $res->json('action'));
+        $this->assertNull($res->json('message_id'));
+    }
 }

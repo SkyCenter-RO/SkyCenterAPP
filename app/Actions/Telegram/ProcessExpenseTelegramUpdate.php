@@ -11,12 +11,13 @@ class ProcessExpenseTelegramUpdate
 {
     public function handle(array $update): array
     {
-        $chatId   = $update['chat_id'];
-        $userId   = $update['user_id'];
-        $type     = $update['update_type'];
-        $text     = trim($update['text'] ?? '');
-        $cbData   = $update['callback_data'] ?? null;
-        $username = $update['username'] ?? null;
+        $chatId    = $update['chat_id'];
+        $userId    = $update['user_id'];
+        $type      = $update['update_type'];
+        $text      = trim($update['text'] ?? '');
+        $cbData    = $update['callback_data'] ?? null;
+        $username  = $update['username'] ?? null;
+        $messageId = $update['message_id'] ?? null;
 
         $session = TelegramSession::where('chat_id', $chatId)
             ->where('user_id', $userId)
@@ -44,6 +45,12 @@ class ProcessExpenseTelegramUpdate
         }
 
         $session->expires_at = now()->addMinutes(30);
+
+        // Capture the bot's message_id from callback_query so we can edit it later
+        if ($type === 'callback_query' && $messageId) {
+            $session->wizard_message_id = $messageId;
+            $session->save();
+        }
 
         return match ($session->state) {
             'selecting_category'     => $this->handleSelectCategory($session, $type, $cbData),
@@ -166,16 +173,34 @@ class ProcessExpenseTelegramUpdate
         ];
     }
 
-    private function transition(TelegramSession $s, string $state, string $text): array
+    private function transition(TelegramSession $s, string $state, string $text, ?array $keyboard = null): array
     {
         $s->state = $state;
         $s->save();
-        return ['action' => 'send', 'chat_id' => $s->chat_id, 'message_id' => null, 'text' => $text, 'keyboard' => null];
+
+        $hasMsgId = ! empty($s->wizard_message_id);
+
+        return [
+            'action'     => $hasMsgId ? 'edit' : 'send',
+            'chat_id'    => $s->chat_id,
+            'message_id' => $s->wizard_message_id,
+            'text'       => $text,
+            'keyboard'   => $keyboard,
+        ];
     }
 
-    private function noChange(TelegramSession $s, string $text): array
+    private function noChange(TelegramSession $s, string $text, ?array $keyboard = null): array
     {
         $s->save();
-        return ['action' => 'send', 'chat_id' => $s->chat_id, 'message_id' => null, 'text' => $text, 'keyboard' => null];
+
+        $hasMsgId = ! empty($s->wizard_message_id);
+
+        return [
+            'action'     => $hasMsgId ? 'edit' : 'send',
+            'chat_id'    => $s->chat_id,
+            'message_id' => $s->wizard_message_id,
+            'text'       => $text,
+            'keyboard'   => $keyboard,
+        ];
     }
 }
