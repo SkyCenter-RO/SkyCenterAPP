@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             MessageTemplateSeeder::class,
             BudgetCategorySeeder::class,
             OperatorUserSeeder::class,
+            MarketingChannelSeeder::class,
         ]);
     }
 }
