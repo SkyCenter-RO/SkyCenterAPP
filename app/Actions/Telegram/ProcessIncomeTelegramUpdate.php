@@ -12,12 +12,13 @@ class ProcessIncomeTelegramUpdate
 {
     public function handle(array $update): array
     {
-        $chatId   = $update['chat_id'];
-        $userId   = $update['user_id'];
-        $type     = $update['update_type'];
-        $text     = trim($update['text'] ?? '');
-        $cbData   = $update['callback_data'] ?? null;
-        $username = $update['username'] ?? null;
+        $chatId    = $update['chat_id'];
+        $userId    = $update['user_id'];
+        $type      = $update['update_type'];
+        $text      = trim($update['text'] ?? '');
+        $cbData    = $update['callback_data'] ?? null;
+        $username  = $update['username'] ?? null;
+        $messageId = $update['message_id'] ?? null;
 
         $session = TelegramSession::where('chat_id', $chatId)
             ->where('user_id', $userId)
@@ -47,6 +48,12 @@ class ProcessIncomeTelegramUpdate
 
         // Refresh expiry on every interaction
         $session->expires_at = now()->addMinutes(30);
+
+        // Capture the bot's message_id from callback_query so we can edit it later
+        if ($type === 'callback_query' && $messageId) {
+            $session->wizard_message_id = $messageId;
+            $session->save();
+        }
 
         return match ($session->state) {
             'selecting_service'  => $this->handleSelectService($session, $type, $cbData),
@@ -314,8 +321,10 @@ class ProcessIncomeTelegramUpdate
         $s->state = $state;
         $s->save();
 
+        $hasMsgId = ! empty($s->wizard_message_id);
+
         return [
-            'action'     => 'send',
+            'action'     => $hasMsgId ? 'edit' : 'send',
             'chat_id'    => $s->chat_id,
             'message_id' => $s->wizard_message_id,
             'text'       => $text,
@@ -327,10 +336,12 @@ class ProcessIncomeTelegramUpdate
     {
         $s->save();
 
+        $hasMsgId = ! empty($s->wizard_message_id);
+
         return [
-            'action'     => 'send',
+            'action'     => $hasMsgId ? 'edit' : 'send',
             'chat_id'    => $s->chat_id,
-            'message_id' => null,
+            'message_id' => $s->wizard_message_id,
             'text'       => $text,
             'keyboard'   => $keyboard,
         ];

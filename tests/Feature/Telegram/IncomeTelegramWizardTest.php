@@ -233,4 +233,46 @@ class IncomeTelegramWizardTest extends TestCase
             'amount'   => 125.00,
         ]);
     }
+
+    public function test_callback_query_stores_wizard_message_id(): void
+    {
+        $this->incomePost($this->msg('start')); // creates session
+        $res = $this->incomePost($this->cb('service:parking')); // callback_query with message_id=50
+        $res->assertOk();
+
+        $session = TelegramSession::first();
+        $this->assertEquals(50, $session->wizard_message_id);
+    }
+
+    public function test_subsequent_transition_returns_edit_action(): void
+    {
+        $this->incomePost($this->msg('start'));
+        $res = $this->incomePost($this->cb('service:parking'));
+        $res->assertOk();
+        $this->assertEquals('edit', $res->json('action'));
+        $this->assertEquals(50, $res->json('message_id'));
+    }
+
+    public function test_text_input_after_callback_also_returns_edit_action(): void
+    {
+        $this->incomePost($this->msg('start'));
+        $this->incomePost($this->cb('service:parking')); // sets wizard_message_id=50
+        $res = $this->incomePost($this->msg('BX 1234 AB')); // text update
+        $res->assertOk();
+        $this->assertEquals('edit', $res->json('action'));
+        $this->assertEquals(50, $res->json('message_id'));
+    }
+
+    public function test_final_save_returns_send_action(): void
+    {
+        $this->incomePost($this->msg('start'));
+        $this->incomePost($this->cb('service:parking'));
+        $this->incomePost($this->msg('BX 1234 AB'));
+        $this->incomePost($this->msg('250'));
+        $res = $this->incomePost($this->cb('payment:cash'));
+        $res->assertOk();
+        // Final confirmation is always a new message (no wizard_message_id)
+        $this->assertEquals('send', $res->json('action'));
+        $this->assertNull($res->json('message_id'));
+    }
 }
