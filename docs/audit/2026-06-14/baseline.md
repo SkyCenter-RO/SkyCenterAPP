@@ -11,6 +11,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 - Environment: host PowerShell in the audit worktree
 - Exit code: `0`
 - Duration: `0.039s`
+- Finding IDs: none
 - Result: `cde21de0d0c7573115e5359f7e0527082e9d06e6`
 
 ### Initial worktree state
@@ -20,6 +21,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 - Environment: host PowerShell in the audit worktree
 - Exit code: `0`
 - Duration: `0.051s`
+- Finding IDs: none
 - Result: no output; the worktree was clean before evidence collection.
 
 ## Containers
@@ -31,6 +33,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 - Environment: host Docker Engine
 - Exit code: `0`
 - Duration: `0.087s`
+- Finding IDs: none
 - Result: Docker server `29.4.3`.
 
 ### Docker Compose
@@ -40,7 +43,18 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 - Environment: host Docker Compose plugin
 - Exit code: `0`
 - Duration: `0.155s`
+- Finding IDs: none
 - Result: Docker Compose `v5.1.4`.
+
+### Active Compose project status
+
+- Command: `docker compose -p app -f D:\Automation\SkyPark\App\docker-compose.yml ps`
+- Timestamp: `2026-06-14T10:45:05.863+03:00`
+- Environment: host Docker Compose targeting the active `app` project with the main checkout Compose file
+- Exit code: `0`
+- Duration: `0.175s`
+- Finding IDs: `SC-AUD-002`
+- Result: Compose reported `app-app-1` up with host port `8080` mapped to container port `8000`, and `app-pgsql-1` up and healthy with host port `55433` mapped to container port `5432`.
 
 ### Existing application stack
 
@@ -49,6 +63,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 - Environment: existing Docker project `app` on network `app_default`
 - Exit code: `0`
 - Duration: `0.121s`
+- Finding IDs: `SC-AUD-002`
 - Result: `app-app-1` was up with host port `8080` mapped to container port `8000`; `app-pgsql-1` was up and healthy with host port `55433` mapped to container port `5432`.
 
 ### Application container state
@@ -58,6 +73,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 - Environment: existing Docker project `app`
 - Exit code: `0`
 - Duration: `0.088s`
+- Finding IDs: none
 - Result: `status=running`, no container health check configured, network `app_default`.
 
 ### Database container state
@@ -67,6 +83,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 - Environment: existing Docker project `app`
 - Exit code: `0`
 - Duration: `0.070s`
+- Finding IDs: `SC-AUD-002`
 - Result: `status=running`, `health=healthy`, network `app_default`.
 
 ### Isolated Compose port configuration
@@ -76,6 +93,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 - Environment: audit worktree Compose configuration; project was not started
 - Exit code: `0`
 - Duration: `0.209s`
+- Finding IDs: `SC-AUD-002`
 - Result: the worktree configuration publishes database target `5432` on host port `55433`. The existing healthy `app-pgsql-1` container already owns `0.0.0.0:55433`, so a second isolated Compose project cannot bind that port concurrently. See `SC-AUD-002`.
 
 ## Runtime Versions
@@ -87,6 +105,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 - Environment: one-off `app-app` image with the audit worktree mounted
 - Exit code: `0`
 - Duration: `1.086s`
+- Finding IDs: none
 - Result: PHP `8.3.31` CLI with Zend OPcache.
 
 ### Composer
@@ -96,6 +115,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 - Environment: one-off `app-app` image with the audit worktree mounted
 - Exit code: `0`
 - Duration: `2.279s`
+- Finding IDs: none
 - Result: Composer `2.10.1` using PHP `8.3.31`.
 
 ### PostgreSQL client
@@ -105,6 +125,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 - Environment: existing PostgreSQL container
 - Exit code: `0`
 - Duration: `0.270s`
+- Finding IDs: none
 - Result: PostgreSQL client `16.14`.
 
 ## Dependencies
@@ -116,6 +137,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 - Environment: host PowerShell in the audit worktree
 - Exit code: `0`
 - Duration: `0.027s`
+- Finding IDs: `SC-AUD-001`
 - Result: no output; `package-lock.json` is not tracked by Git.
 
 ### Composer manifest validation
@@ -125,6 +147,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 - Environment: one-off `app-app` image with the audit worktree mounted
 - Exit code: `0`
 - Duration: `2.116s`
+- Finding IDs: none
 - Result: `composer.json` is valid under strict validation.
 
 ### Direct Composer dependencies
@@ -134,6 +157,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 - Environment: one-off `app-app` image with the audit worktree mounted
 - Exit code: `0`
 - Duration: `1.699s`
+- Finding IDs: none
 - Result: 11 direct packages were installed: `fakerphp/faker 1.24.1`, `filament/filament 5.6.6`, `laravel/framework 12.61.1`, `laravel/pail 1.2.7`, `laravel/pint 1.29.1`, `laravel/sail 1.62.0`, `laravel/tinker 2.11.1`, `mockery/mockery 1.6.12`, `nunomaduro/collision 8.9.4`, `phpunit/phpunit 11.5.55`, and `smalot/pdfparser 2.12.5`.
 
 ### Laravel application summary
@@ -143,6 +167,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 - Environment: one-off `app-app` image with the audit worktree mounted; ephemeral test key supplied
 - Exit code: `0`
 - Duration: `23.547s`
+- Finding IDs: none
 - Result: Laravel `12.61.1`, PHP `8.3.31`, Composer `2.10.1`, Filament `5.6.6`, and Livewire `4.3.1`. The local environment reported debug enabled, PostgreSQL, database-backed cache/queue/session, UTC timezone, uncached config/events/routes, cached views, and an unlinked public storage path.
 
 ## Routes and Migrations
@@ -154,6 +179,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 - Environment: one-off `app-app` image with the audit worktree mounted and connected to `app_default`
 - Exit code: `0`
 - Duration: `11.188s`
+- Finding IDs: none
 - Result: Laravel listed `84` non-vendor routes.
 
 ### Migration status
@@ -163,6 +189,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 - Environment: one-off `app-app` image with the audit worktree mounted; database host `pgsql` on `app_default`
 - Exit code: `0`
 - Duration: `10.801s`
+- Finding IDs: none
 - Result: all `19` listed migrations had status `Ran`; batches `1` and `2` were present.
 
 ## Automated Tests
@@ -172,6 +199,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 - Environment: one-off `app-app` image with the audit worktree mounted; `phpunit.xml` test database `skycenter_app_test` on `pgsql`
 - Exit code: `0`
 - Duration: `153.567s` wall clock; PHPUnit reported `142.18s`
+- Finding IDs: none
 - Result: `166` tests passed with `454` assertions and no failures.
 
 ## Formatting
@@ -181,6 +209,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 - Environment: one-off `app-app` image with the audit worktree mounted
 - Exit code: `1`
 - Duration: `10.084s`
+- Finding IDs: `SC-AUD-003`
 - Result: Pint checked `302` files and reported `78` style issues across application and test files. No files were changed. See `SC-AUD-003`.
 
 ## Frontend Build
@@ -192,6 +221,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 - Environment: host Node.js/npm in the audit worktree; `package-lock.json` absent
 - Exit code: `1`
 - Duration: `1.422s`
+- Finding IDs: `SC-AUD-001`
 - Result: npm returned `EUSAGE`: `npm ci` requires an existing `package-lock.json` or compatible `npm-shrinkwrap.json`. No lockfile was created. See `SC-AUD-001`.
 
 ### Production asset build
@@ -201,6 +231,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 - Environment: host Node.js/npm in the audit worktree using pre-existing local `node_modules` prepared with `npm install`
 - Exit code: `0`
 - Duration: `2.720s`; Vite reported `1.39s`
+- Finding IDs: `SC-AUD-001`
 - Result: Vite `7.3.5` transformed `55` modules and emitted the production manifest, CSS, and JavaScript under ignored `public/build/` paths.
 
 ## Reproducibility Blockers
