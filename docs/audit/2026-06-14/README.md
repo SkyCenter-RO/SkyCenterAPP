@@ -32,7 +32,7 @@ This directory contains the evidence and findings for the approved full-applicat
 
 | Area | Status | Evidence file |
 |---|---|---|
-| Baseline | Pending | `baseline.md` |
+| Baseline | Complete | `baseline.md` |
 | Inventory | Pending | `application-inventory.md` |
 | Security | Pending | `security-asvs.md` |
 | Data integrity | Pending | `data-integrity.md` |
