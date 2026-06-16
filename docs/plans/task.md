@@ -1,9 +1,7 @@
 | Task ID | Description | Status |
 | :--- | :--- | :--- |
-| Task 1 | Create local/supervised queue worker daemon | completed |
-| Task 2 | Implement Eloquent policies for reservation/contract models & Filament resource access checks | completed |
-| Task 3 | Prevent overlapping dates on lodging rooms and vehicle rentals | completed |
-| Task 4 | Apply database row locking (lockForUpdate) on concurrent webhook/bot inputs | completed |
-| Task 5 | Replace manual DB ID inputs with searchable select selectors in Filament | completed |
-| Task 6 | Configure automated CI/CD workflows for testing/formatting gates | completed |
-| Task 7 | Full test suite verification & final git cleanup | completed |
+| Task 1 | Wrap webhook and Telegram handlers in DB transactions | completed |
+| Task 2 | Configure API rate limiting and harden seeders | completed |
+| Task 3 | Implement reservation status observers and plate normalization | completed |
+| Task 4 | Commit npm lockfile, configure PHPStan, and create database backup script | completed |
+| Task 5 | Run full test suite, verify static analysis, and clean up | completed |

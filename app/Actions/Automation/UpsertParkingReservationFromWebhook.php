@@ -6,6 +6,7 @@ use App\Models\AutomationEvent;
 use App\Models\AutomationWebhookLog;
 use App\Models\ParkingCustomer;
 use App\Models\ParkingReservation;
+use App\Support\LicensePlate;
 use App\Support\PhoneNumber;
 
 class UpsertParkingReservationFromWebhook
@@ -45,6 +46,7 @@ class UpsertParkingReservationFromWebhook
                 'lot_id' => $payload['lot_id'] ?? config('skycenter.default_parking_lot_id') ?? $reservation->lot_id,
                 'status' => $existing?->status ?? 'pending_approval',
                 'plate' => $payload['plate'] ?? $reservation->plate,
+                'normalized_plate' => LicensePlate::normalize($payload['plate'] ?? $reservation->plate),
                 'vehicle_type' => $payload['vehicle_type'] ?? $reservation->vehicle_type,
                 'check_in_at' => $checkInAt,
                 'check_out_at' => $checkOutAt,

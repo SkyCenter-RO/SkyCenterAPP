@@ -27,7 +27,7 @@ class TelegramSession extends Model
         return $this->expires_at->isPast();
     }
 
-    public static function findOrCreate(string $chatId, string $userId, string $groupType): static
+    public static function findOrCreate(string $chatId, string $userId, string $groupType): self
     {
         return static::firstOrCreate(
             ['chat_id' => $chatId, 'user_id' => $userId],

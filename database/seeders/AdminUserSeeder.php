@@ -15,7 +15,7 @@ class AdminUserSeeder extends Seeder
         ]);
 
         if (! $admin->exists) {
-            $password = config('skycenter.bootstrap_admin_password');
+            $password = env('BOOTSTRAP_ADMIN_PASSWORD') ?? config('skycenter.bootstrap_admin_password');
 
             if (blank($password)) {
                 $password = 'schimba-parola';
@@ -23,7 +23,7 @@ class AdminUserSeeder extends Seeder
 
             if (config('app.env') === 'production' && trim((string) $password) === 'schimba-parola') {
                 throw new \RuntimeException(
-                    'ADMIN_BOOTSTRAP_PASSWORD must be set to a non-placeholder value in production.',
+                    'BOOTSTRAP_ADMIN_PASSWORD (or ADMIN_BOOTSTRAP_PASSWORD) must be set to a non-placeholder value in production.',
                 );
             }
 

@@ -8,7 +8,6 @@ use App\Models\ParkingPrice;
 use App\Models\ParkingReservation;
 use App\Models\ParkingReservationImage;
 use App\Models\ParkingSpace;
-use App\Models\ParkingStatusAudit;
 use App\Models\ParkingZone;
 use Carbon\CarbonInterface;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -34,9 +33,7 @@ class ParkingModelsTest extends TestCase
             'keys_left' => true,
             'metadata' => ['note' => 'test'],
         ]);
-
         ParkingReservationImage::create(['parking_reservation_id' => $reservation->id, 'path' => 'img/1.jpg']);
-        ParkingStatusAudit::create(['parking_reservation_id' => $reservation->id, 'to_status' => 'booked']);
 
         $this->assertSame(1, $lot->zones()->count());
         $this->assertSame('Parcarea 1', $reservation->lot->name);
@@ -106,11 +103,7 @@ class ParkingModelsTest extends TestCase
             'parking_reservation_id' => $reservation->id,
             'path' => 'img/2.jpg',
         ]);
-        $audit = ParkingStatusAudit::create([
-            'parking_reservation_id' => $reservation->id,
-            'to_status' => 'booked',
-            'changed_at' => '2026-06-08 14:00:00+03:00',
-        ]);
+        $audit = $reservation->statusAudits()->first();
 
         $this->assertInstanceOf(CarbonInterface::class, $reservation->check_in_at);
         $this->assertInstanceOf(CarbonInterface::class, $reservation->check_out_at);

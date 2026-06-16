@@ -5,7 +5,6 @@ namespace Tests\Feature\Panel;
 use App\Models\LodgingProperty;
 use App\Models\LodgingReservation;
 use App\Models\Payment;
-use App\Models\PaymentChangeAudit;
 use App\Models\Room;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -26,7 +25,6 @@ class PaymentModelsTest extends TestCase
             'amount' => 350.00,
             'method' => 'cash',
         ]);
-        PaymentChangeAudit::create(['payment_id' => $payment->id, 'action' => 'created']);
 
         $this->assertSame('lodging', $payment->service);
         $this->assertSame($reservation->id, $payment->lodgingReservation->id);

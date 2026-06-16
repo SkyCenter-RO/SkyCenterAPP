@@ -149,4 +149,25 @@ class AutomationParkingReservationWebhookTest extends TestCase
         $reservation = ParkingReservation::query()->where('external_id', 'FORM-4004')->first();
         $this->assertSame($lot->id, $reservation->lot_id);
     }
+
+    public function test_webhook_populates_normalized_plate(): void
+    {
+        $lot = ParkingLot::create(['name' => 'Parcarea 1', 'total_spaces' => 54]);
+
+        $payload = [
+            'external_id' => 'FORM-5005',
+            'name' => 'Gheorghe Popescu',
+            'phone' => '0755666777',
+            'plate' => 'b-102-abc',
+            'lot_id' => $lot->id,
+            'check_in_at' => '2026-07-20 10:00:00',
+            'check_out_at' => '2026-07-22 10:00:00',
+        ];
+
+        $this->postJson($this->endpoint(), $payload, $this->headers())->assertOk();
+
+        $reservation = ParkingReservation::query()->where('external_id', 'FORM-5005')->first();
+        $this->assertSame('b-102-abc', $reservation->plate);
+        $this->assertSame('B102ABC', $reservation->normalized_plate);
+    }
 }

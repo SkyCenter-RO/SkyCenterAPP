@@ -229,35 +229,38 @@ class ProcessIncomeTelegramUpdate
             default => $service,
         };
 
-        // Save raw message
-        $raw = BudgetRawMessage::create([
-            'chat_id' => $s->chat_id,
-            'message_id' => 'bot-session-'.$s->id,
-            'text' => "[INCOME] {$description} - {$amount} {$currency} ({$paymentMethod})",
-            'parsed' => true,
-            'received_at' => now(),
-        ]);
-
-        // Save transaction
-        $serviceMap = ['parking' => 'parcare', 'hotel' => 'hotel', 'rent' => 'rent'];
-        BudgetTransaction::create([
-            'type' => 'income',
-            'service' => $serviceMap[$service] ?? $service,
-            'amount' => $amount,
-            'currency' => $currency,
-            'occurred_on' => now()->toDateString(),
-            'description' => $description,
-            'telegram_chat' => 'income',
-            'raw_message_id' => $raw->id,
-            'metadata' => [
-                'payment_method' => $paymentMethod,
-                'telegram_user' => $s->username,
-                'wizard_data' => $data,
-            ],
-        ]);
-
         $chatId = $s->chat_id;
-        $s->delete();
+
+        \DB::transaction(function () use ($s, $description, $amount, $currency, $paymentMethod, $service, $data) {
+            // Save raw message
+            $raw = BudgetRawMessage::create([
+                'chat_id' => $s->chat_id,
+                'message_id' => 'bot-session-'.$s->id,
+                'text' => "[INCOME] {$description} - {$amount} {$currency} ({$paymentMethod})",
+                'parsed' => true,
+                'received_at' => now(),
+            ]);
+
+            // Save transaction
+            $serviceMap = ['parking' => 'parcare', 'hotel' => 'hotel', 'rent' => 'rent'];
+            BudgetTransaction::create([
+                'type' => 'income',
+                'service' => $serviceMap[$service] ?? $service,
+                'amount' => $amount,
+                'currency' => $currency,
+                'occurred_on' => now()->toDateString(),
+                'description' => $description,
+                'telegram_chat' => 'income',
+                'raw_message_id' => $raw->id,
+                'metadata' => [
+                    'payment_method' => $paymentMethod,
+                    'telegram_user' => $s->username,
+                    'wizard_data' => $data,
+                ],
+            ]);
+
+            $s->delete();
+        });
 
         return [
             'action' => 'send',

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Telegram;
 
+use App\Models\BudgetTransaction;
 use App\Models\LodgingProperty;
 use App\Models\TelegramSession;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -272,8 +273,32 @@ class IncomeTelegramWizardTest extends TestCase
         $this->incomePost($this->msg('250'));
         $res = $this->incomePost($this->cb('payment:cash'));
         $res->assertOk();
-        // Final confirmation is always a new message (no wizard_message_id)
         $this->assertEquals('send', $res->json('action'));
         $this->assertNull($res->json('message_id'));
+    }
+
+    public function test_transaction_rolls_back_on_failure(): void
+    {
+        $this->incomePost($this->msg('start'));
+        $this->incomePost($this->cb('service:parking'));
+        $this->incomePost($this->msg('BX 1234 AB'));
+        $this->incomePost($this->msg('250'));
+
+        // Register creating listener to simulate database error on BudgetTransaction
+        BudgetTransaction::creating(function () {
+            throw new \RuntimeException('Database insertion failed');
+        });
+
+        $res = $this->incomePost($this->cb('payment:cash'));
+        $res->assertStatus(500);
+
+        // Verify that no raw message was created
+        $this->assertDatabaseEmpty('budget_raw_messages');
+
+        // Verify that the telegram session was NOT deleted
+        $this->assertDatabaseHas('telegram_sessions', [
+            'chat_id' => '-100111',
+            'state' => 'selecting_payment',
+        ]);
     }
 }

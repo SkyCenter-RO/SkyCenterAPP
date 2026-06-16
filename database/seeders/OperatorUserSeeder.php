@@ -23,7 +23,15 @@ class OperatorUserSeeder extends Seeder
             $user->role = User::ROLE_OPERATOR;
             $user->is_active = true;
             if (! $user->exists) {
-                $user->password = Hash::make('parola-operator');
+                $password = env('BOOTSTRAP_OPERATOR_PASSWORD', 'parola-operator');
+
+                if (config('app.env') === 'production' && $password === 'parola-operator') {
+                    throw new \RuntimeException(
+                        'BOOTSTRAP_OPERATOR_PASSWORD must be set to a non-placeholder value in production.',
+                    );
+                }
+
+                $user->password = Hash::make($password);
             }
             $user->save();
         }

@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Actions\Messaging\QueueConfirmationMessage;
 use App\Models\ParkingReservation;
+use App\Models\ParkingStatusAudit;
 
 class ParkingReservationObserver
 {
@@ -11,6 +12,16 @@ class ParkingReservationObserver
 
     public function created(ParkingReservation $reservation): void
     {
+        if ($reservation->status) {
+            ParkingStatusAudit::create([
+                'parking_reservation_id' => $reservation->id,
+                'user_id' => auth()->id() ?? $reservation->updated_by_id ?? $reservation->created_by_id,
+                'from_status' => null,
+                'to_status' => $reservation->status,
+                'changed_at' => now(),
+            ]);
+        }
+
         if ($reservation->status === 'booked') {
             $this->queueConfirmation->handleParking($reservation);
         }
@@ -18,6 +29,16 @@ class ParkingReservationObserver
 
     public function updated(ParkingReservation $reservation): void
     {
+        if ($reservation->wasChanged('status')) {
+            ParkingStatusAudit::create([
+                'parking_reservation_id' => $reservation->id,
+                'user_id' => auth()->id() ?? $reservation->updated_by_id,
+                'from_status' => $reservation->getOriginal('status'),
+                'to_status' => $reservation->status,
+                'changed_at' => now(),
+            ]);
+        }
+
         if ($reservation->wasChanged('status')
             && $reservation->status === 'booked'
             && $reservation->getOriginal('status') !== 'booked') {

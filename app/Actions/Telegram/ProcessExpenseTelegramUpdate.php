@@ -110,29 +110,32 @@ class ProcessExpenseTelegramUpdate
         $catName = $data['category_name'] ?? ($data['custom_desc'] ?? 'Cheltuială');
         $desc = $data['custom_desc'] ?? $catName;
 
-        $raw = BudgetRawMessage::create([
-            'chat_id' => $s->chat_id,
-            'message_id' => 'bot-session-'.$s->id,
-            'text' => "[EXPENSE] {$desc} - {$amount} RON",
-            'parsed' => true,
-            'received_at' => now(),
-        ]);
-
-        BudgetTransaction::create([
-            'type' => 'expense',
-            'category_id' => $catId,
-            'service' => $catId ? BudgetCategory::find($catId)?->service : 'general',
-            'amount' => $amount,
-            'currency' => 'RON',
-            'occurred_on' => now()->toDateString(),
-            'description' => $desc,
-            'telegram_chat' => 'expense',
-            'raw_message_id' => $raw->id,
-            'metadata' => ['telegram_user' => $s->username],
-        ]);
-
         $chatId = $s->chat_id;
-        $s->delete();
+
+        \DB::transaction(function () use ($s, $desc, $amount, $catId) {
+            $raw = BudgetRawMessage::create([
+                'chat_id' => $s->chat_id,
+                'message_id' => 'bot-session-'.$s->id,
+                'text' => "[EXPENSE] {$desc} - {$amount} RON",
+                'parsed' => true,
+                'received_at' => now(),
+            ]);
+
+            BudgetTransaction::create([
+                'type' => 'expense',
+                'category_id' => $catId,
+                'service' => $catId ? BudgetCategory::find($catId)?->service : 'general',
+                'amount' => $amount,
+                'currency' => 'RON',
+                'occurred_on' => now()->toDateString(),
+                'description' => $desc,
+                'telegram_chat' => 'expense',
+                'raw_message_id' => $raw->id,
+                'metadata' => ['telegram_user' => $s->username],
+            ]);
+
+            $s->delete();
+        });
 
         return [
             'action' => 'send',

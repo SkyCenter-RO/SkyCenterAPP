@@ -1,0 +1,14 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    paths:
+        - app/
+
+    level: 5
+
+    ignoreErrors:
+        - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$#'
+        - '#Access to an undefined property App\\Models\\#'
+        - '#Using nullsafe property access .* on left side of \?\? is unnecessary#'
+        - '#contains unresolvable type#'

@@ -3,6 +3,7 @@
 namespace Tests\Feature\Telegram;
 
 use App\Models\BudgetCategory;
+use App\Models\BudgetTransaction;
 use App\Models\TelegramSession;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\TestResponse;
@@ -211,8 +212,38 @@ class ExpenseTelegramWizardTest extends TestCase
         $this->expensePost($this->cb("category:{$cat->id}")); // sets wizard_message_id=50
         $res = $this->expensePost($this->msg('300'));           // text update — still retains wizard_message_id
         $res->assertOk();
-        // Final save always returns 'send' (session deleted, clean confirmation)
         $this->assertEquals('send', $res->json('action'));
         $this->assertNull($res->json('message_id'));
+    }
+
+    public function test_transaction_rolls_back_on_failure(): void
+    {
+        $this->expensePost($this->msg('start'));
+        $cat = BudgetCategory::create([
+            'service' => 'general',
+            'name' => 'Kaufland',
+            'kind' => 'expense',
+            'frequency' => 'once',
+            'currency' => 'RON',
+            'is_active' => true,
+        ]);
+        $this->expensePost($this->cb("category:{$cat->id}"));
+
+        // Register creating listener to simulate database error on BudgetTransaction
+        BudgetTransaction::creating(function () {
+            throw new \RuntimeException('Database insertion failed');
+        });
+
+        $res = $this->expensePost($this->msg('300'));
+        $res->assertStatus(500);
+
+        // Verify that no raw message was created
+        $this->assertDatabaseEmpty('budget_raw_messages');
+
+        // Verify that the telegram session was NOT deleted
+        $this->assertDatabaseHas('telegram_sessions', [
+            'chat_id' => '-100222',
+            'state' => 'waiting_expense_amount',
+        ]);
     }
 }
