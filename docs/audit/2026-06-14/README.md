@@ -46,7 +46,9 @@ This directory contains the evidence and findings for the approved full-applicat
 | Engineering quality | Complete | `engineering-quality.md` |
 | Workflow status | Complete | `missing-workflows.md` |
 | Documentation plan | Complete | `operations-plan.md` |
+| Remediation backlog | Complete | `remediation-backlog.md` |
 | Final synthesis | Pending | `final-report.md` |
+
 
 
 

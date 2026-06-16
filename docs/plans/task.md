@@ -15,6 +15,6 @@
 | Task 13 | Assess engineering quality and CI gates | completed |
 | Task 14 | Separate missing workflows from defects | completed |
 | Task 15 | Produce documentation and operations plan | completed |
-| Task 16 | Synthesize findings and remediation backlog | in progress |
-| Task 17 | Create final audit report and release recommendation | not started |
+| Task 16 | Synthesize findings and remediation backlog | completed |
+| Task 17 | Create final audit report and release recommendation | in progress |
 | Task 18 | Verify plan completion | not started |
