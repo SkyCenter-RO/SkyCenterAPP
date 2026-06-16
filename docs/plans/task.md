@@ -4,7 +4,7 @@
 | Task 2 | Record reproducible baseline | completed |
 | Task 3 | Build application and integration inventory | completed |
 | Task 4 | Audit authentication, authorization, and ASVS controls | completed |
-| Task 5 | Audit database integrity, idempotency, and concurrency | not started |
+| Task 5 | Audit database integrity, idempotency, and concurrency | completed |
 | Task 6 | Audit parking and lodging workflows | not started |
 | Task 7 | Audit rental, payments, budget, and Telegram workflows | not started |
 | Task 8 | Audit scheduling, messaging, automation, and marketing | not started |
