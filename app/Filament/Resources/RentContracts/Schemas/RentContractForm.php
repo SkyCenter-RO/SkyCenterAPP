@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\RentContracts\Schemas;
 
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
@@ -18,10 +19,16 @@ class RentContractForm
                     ->default('manual'),
                 TextInput::make('external_id'),
                 TextInput::make('contract_code'),
-                TextInput::make('rent_vehicle_id')
-                    ->numeric(),
-                TextInput::make('rent_client_id')
-                    ->numeric(),
+                Select::make('rent_vehicle_id')
+                    ->relationship('vehicle', 'license_plate')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
+                Select::make('rent_client_id')
+                    ->relationship('client', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
                 TextInput::make('usage_type')
                     ->required(),
                 DatePicker::make('start_date')

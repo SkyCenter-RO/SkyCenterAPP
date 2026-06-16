@@ -33,4 +33,14 @@ class RentPanelTest extends TestCase
             ['rent-mentenanta'],
         ];
     }
+
+    public function test_rent_contract_form_has_searchable_relation_selects(): void
+    {
+        $admin = $this->admin();
+        $this->actingAs($admin);
+
+        \Livewire\Livewire::test(\App\Filament\Resources\RentContracts\Pages\CreateRentContract::class)
+            ->assertFormFieldExists('rent_vehicle_id')
+            ->assertFormFieldExists('rent_client_id');
+    }
 }
