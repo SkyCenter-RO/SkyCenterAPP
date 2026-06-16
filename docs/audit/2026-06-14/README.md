@@ -33,7 +33,7 @@ This directory contains the evidence and findings for the approved full-applicat
 | Area | Status | Evidence file |
 |---|---|---|
 | Baseline | Complete | `baseline.md` |
-| Inventory | Pending | `application-inventory.md` |
+| Inventory | Complete | `application-inventory.md` |
 | Security | Pending | `security-asvs.md` |
 | Data integrity | Pending | `data-integrity.md` |
 | Parking and lodging | Pending | `workflows-parking-lodging.md` |
