@@ -5,5 +5,5 @@
 | Task 3 | Prevent overlapping dates on lodging rooms and vehicle rentals | completed |
 | Task 4 | Apply database row locking (lockForUpdate) on concurrent webhook/bot inputs | completed |
 | Task 5 | Replace manual DB ID inputs with searchable select selectors in Filament | completed |
-| Task 6 | Configure automated CI/CD workflows for testing/formatting gates | in progress |
+| Task 6 | Configure automated CI/CD workflows for testing/formatting gates | completed |
 | Task 7 | Full test suite verification & final git cleanup | not started |
