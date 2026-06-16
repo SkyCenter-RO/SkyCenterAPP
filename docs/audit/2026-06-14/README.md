@@ -41,6 +41,6 @@ This directory contains the evidence and findings for the approved full-applicat
 | Scheduling, messaging, and marketing | Complete | `workflows-scheduling-messaging-marketing.md` |
 | Interconnections | Complete | `interconnections.md` |
 | Test traceability | Complete | `test-traceability.md` |
-| Operations | Pending | `operations.md` |
+| Operations | Complete | `operations.md` |
 | Manual usability | Pending | `manual-usability.md` |
 | Final synthesis | Pending | `final-report.md` |
