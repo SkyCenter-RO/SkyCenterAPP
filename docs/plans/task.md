@@ -9,8 +9,8 @@
 | Task 7 | Audit rental, payments, budget, and Telegram workflows | completed |
 | Task 8 | Audit scheduling, messaging, automation, and marketing | completed |
 | Task 9 | Build cross-domain interconnection matrix | completed |
-| Task 10 | Create test traceability and coverage analysis | in progress |
-| Task 11 | Audit build, deployment, queues, logging, backup, and recovery | not started |
+| Task 10 | Create test traceability and coverage analysis | completed |
+| Task 11 | Audit build, deployment, queues, logging, backup, and recovery | in progress |
 | Task 12 | Perform manual administrator and operator testing | not started |
 | Task 13 | Assess engineering quality and CI gates | not started |
 | Task 14 | Separate missing workflows from defects | not started |

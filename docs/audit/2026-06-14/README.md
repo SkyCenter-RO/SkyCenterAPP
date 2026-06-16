@@ -40,7 +40,7 @@ This directory contains the evidence and findings for the approved full-applicat
 | Rental and finance | Complete | `workflows-rental-finance.md` |
 | Scheduling, messaging, and marketing | Complete | `workflows-scheduling-messaging-marketing.md` |
 | Interconnections | Complete | `interconnections.md` |
-| Test traceability | Pending | `test-traceability.md` |
+| Test traceability | Complete | `test-traceability.md` |
 | Operations | Pending | `operations.md` |
 | Manual usability | Pending | `manual-usability.md` |
 | Final synthesis | Pending | `final-report.md` |
