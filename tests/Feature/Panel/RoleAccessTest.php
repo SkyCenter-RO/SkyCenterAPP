@@ -44,6 +44,9 @@ class RoleAccessTest extends TestCase
             ['buget-salarii'],
             ['sistem-plati'],
             ['sistem-utilizatori'],
+            ['sistem-automatizari'],
+            ['sistem-sabloane'],
+            ['sistem-mesaje-trimise'],
         ];
     }
 }

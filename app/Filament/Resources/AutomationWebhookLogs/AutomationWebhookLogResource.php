@@ -31,6 +31,11 @@ class AutomationWebhookLogResource extends Resource
 
     protected static ?int $navigationSort = 4;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->isAdmin() ?? false;
+    }
+
     public static function canCreate(): bool
     {
         return false;
