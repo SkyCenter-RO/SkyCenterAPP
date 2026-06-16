@@ -20,29 +20,38 @@ class ProcessIncomeTelegramUpdate
         $username  = $update['username'] ?? null;
         $messageId = $update['message_id'] ?? null;
 
-        $session = TelegramSession::where('chat_id', $chatId)
-            ->where('user_id', $userId)
-            ->first();
-
-        // Expired or missing session → reset
         $expired = false;
-        if ($session && $session->isExpired()) {
-            $session->delete();
-            $session = null;
-            $expired = true;
-        }
+        $isNew = false;
 
-        if (! $session) {
-            $session = TelegramSession::create([
-                'chat_id'    => $chatId,
-                'user_id'    => $userId,
-                'username'   => $username,
-                'group_type' => 'income',
-                'state'      => 'selecting_service',
-                'data'       => [],
-                'expires_at' => now()->addMinutes(30),
-            ]);
+        $session = \DB::transaction(function () use ($chatId, $userId, $username, &$expired, &$isNew) {
+            $session = TelegramSession::where('chat_id', $chatId)
+                ->where('user_id', $userId)
+                ->lockForUpdate()
+                ->first();
 
+            if ($session && $session->isExpired()) {
+                $session->delete();
+                $session = null;
+                $expired = true;
+            }
+
+            if (! $session) {
+                $session = TelegramSession::create([
+                    'chat_id'    => $chatId,
+                    'user_id'    => $userId,
+                    'username'   => $username,
+                    'group_type' => 'income',
+                    'state'      => 'selecting_service',
+                    'data'       => [],
+                    'expires_at' => now()->addMinutes(30),
+                ]);
+                $isNew = true;
+            }
+
+            return $session;
+        });
+
+        if ($isNew) {
             return $this->selectServicePrompt($session, $expired);
         }
 

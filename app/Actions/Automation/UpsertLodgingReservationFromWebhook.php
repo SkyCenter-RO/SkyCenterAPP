@@ -28,37 +28,42 @@ class UpsertLodgingReservationFromWebhook
             return $this->error('Missing required fields: source, external_id, check_in, check_out');
         }
 
-        $existing = LodgingReservation::query()
-            ->where('source', $source)
-            ->where('external_id', $externalId)
-            ->first();
+        $reservation = \DB::transaction(function () use ($source, $externalId, $payload, $log) {
+            $existing = LodgingReservation::query()
+                ->where('source', $source)
+                ->where('external_id', $externalId)
+                ->lockForUpdate()
+                ->first();
 
-        $reservation = $existing ?? new LodgingReservation();
-        $reservation->fill([
-            'source' => $source,
-            'external_id' => $externalId,
-            'guest_name' => $payload['guest_name'] ?? $reservation->guest_name,
-            'phone' => $payload['phone'] ?? $reservation->phone,
-            'normalized_phone' => PhoneNumber::normalize($payload['phone'] ?? null) ?? $reservation->normalized_phone,
-            'email' => $payload['email'] ?? $reservation->email,
-            'status' => $existing?->status ?? 'pending',
-            'check_in' => $checkIn,
-            'check_out' => $checkOut,
-            'nights' => $payload['nights'] ?? $reservation->nights,
-            'price' => $payload['price'] ?? $reservation->price,
-            'currency' => $payload['currency'] ?? $reservation->currency ?? 'RON',
-        ]);
-        $reservation->save();
+            $reservation = $existing ?? new LodgingReservation();
+            $reservation->fill([
+                'source' => $source,
+                'external_id' => $externalId,
+                'guest_name' => $payload['guest_name'] ?? $reservation->guest_name,
+                'phone' => $payload['phone'] ?? $reservation->phone,
+                'normalized_phone' => PhoneNumber::normalize($payload['phone'] ?? null) ?? $reservation->normalized_phone,
+                'email' => $payload['email'] ?? $reservation->email,
+                'status' => $existing?->status ?? 'pending',
+                'check_in' => $payload['check_in'] ?? null,
+                'check_out' => $payload['check_out'] ?? null,
+                'nights' => $payload['nights'] ?? $reservation->nights,
+                'price' => $payload['price'] ?? $reservation->price,
+                'currency' => $payload['currency'] ?? $reservation->currency ?? 'RON',
+            ]);
+            $reservation->save();
 
-        AutomationEvent::create([
-            'webhook_log_id' => $log->id,
-            'event_type' => $existing ? 'reservation_updated' : 'reservation_created',
-            'service' => 'lodging',
-            'external_id' => $externalId,
-            'occurred_at' => now(),
-            'status' => 'processed',
-            'payload' => $payload,
-        ]);
+            AutomationEvent::create([
+                'webhook_log_id' => $log->id,
+                'event_type' => $existing ? 'reservation_updated' : 'reservation_created',
+                'service' => 'lodging',
+                'external_id' => $externalId,
+                'occurred_at' => now(),
+                'status' => 'processed',
+                'payload' => $payload,
+            ]);
+
+            return $reservation;
+        });
 
         return [
             'status' => 'processed',
