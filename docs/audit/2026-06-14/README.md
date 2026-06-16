@@ -47,7 +47,7 @@ This directory contains the evidence and findings for the approved full-applicat
 | Workflow status | Complete | `missing-workflows.md` |
 | Documentation plan | Complete | `operations-plan.md` |
 | Remediation backlog | Complete | `remediation-backlog.md` |
-| Final synthesis | Pending | `final-report.md` |
+| Final synthesis | Complete | `final-report.md` |
 
 
 
