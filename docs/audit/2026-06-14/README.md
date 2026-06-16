@@ -38,7 +38,7 @@ This directory contains the evidence and findings for the approved full-applicat
 | Data integrity | Complete | `data-integrity.md` |
 | Parking and lodging | Complete | `workflows-parking-lodging.md` |
 | Rental and finance | Complete | `workflows-rental-finance.md` |
-| Scheduling, messaging, and marketing | Pending | `workflows-scheduling-messaging-marketing.md` |
+| Scheduling, messaging, and marketing | Complete | `workflows-scheduling-messaging-marketing.md` |
 | Interconnections | Pending | `interconnections.md` |
 | Test traceability | Pending | `test-traceability.md` |
 | Operations | Pending | `operations.md` |
