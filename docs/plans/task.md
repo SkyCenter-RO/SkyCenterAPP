@@ -1,20 +1,9 @@
 | Task ID | Description | Status |
 | :--- | :--- | :--- |
-| Task 1 | Create audit workspace and evidence schema | completed |
-| Task 2 | Record reproducible baseline | completed |
-| Task 3 | Build application and integration inventory | completed |
-| Task 4 | Audit authentication, authorization, and ASVS controls | completed |
-| Task 5 | Audit database integrity, idempotency, and concurrency | completed |
-| Task 6 | Audit parking and lodging workflows | completed |
-| Task 7 | Audit rental, payments, budget, and Telegram workflows | completed |
-| Task 8 | Audit scheduling, messaging, automation, and marketing | completed |
-| Task 9 | Build cross-domain interconnection matrix | completed |
-| Task 10 | Create test traceability and coverage analysis | completed |
-| Task 11 | Audit build, deployment, queues, logging, backup, and recovery | completed |
-| Task 12 | Perform manual administrator and operator testing | completed |
-| Task 13 | Assess engineering quality and CI gates | completed |
-| Task 14 | Separate missing workflows from defects | completed |
-| Task 15 | Produce documentation and operations plan | completed |
-| Task 16 | Synthesize findings and remediation backlog | completed |
-| Task 17 | Create final audit report and release recommendation | completed |
-| Task 18 | Verify plan completion | completed |
+| Task 1 | Create local/supervised queue worker daemon | completed |
+| Task 2 | Implement Eloquent policies for reservation/contract models & Filament resource access checks | not started |
+| Task 3 | Prevent overlapping dates on lodging rooms and vehicle rentals | not started |
+| Task 4 | Apply database row locking (lockForUpdate) on concurrent webhook/bot inputs | not started |
+| Task 5 | Replace manual DB ID inputs with searchable select selectors in Filament | not started |
+| Task 6 | Configure automated CI/CD workflows for testing/formatting gates | not started |
+| Task 7 | Full test suite verification & final git cleanup | not started |
