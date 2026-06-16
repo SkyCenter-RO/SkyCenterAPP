@@ -13,8 +13,8 @@
 | Task 11 | Audit build, deployment, queues, logging, backup, and recovery | completed |
 | Task 12 | Perform manual administrator and operator testing | completed |
 | Task 13 | Assess engineering quality and CI gates | completed |
-| Task 14 | Separate missing workflows from defects | in progress |
-| Task 15 | Produce documentation and operations plan | not started |
+| Task 14 | Separate missing workflows from defects | completed |
+| Task 15 | Produce documentation and operations plan | in progress |
 | Task 16 | Synthesize findings and remediation backlog | not started |
 | Task 17 | Create final audit report and release recommendation | not started |
 | Task 18 | Verify plan completion | not started |
