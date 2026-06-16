@@ -39,7 +39,7 @@ This directory contains the evidence and findings for the approved full-applicat
 | Parking and lodging | Complete | `workflows-parking-lodging.md` |
 | Rental and finance | Complete | `workflows-rental-finance.md` |
 | Scheduling, messaging, and marketing | Complete | `workflows-scheduling-messaging-marketing.md` |
-| Interconnections | Pending | `interconnections.md` |
+| Interconnections | Complete | `interconnections.md` |
 | Test traceability | Pending | `test-traceability.md` |
 | Operations | Pending | `operations.md` |
 | Manual usability | Pending | `manual-usability.md` |
