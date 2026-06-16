@@ -43,4 +43,6 @@ This directory contains the evidence and findings for the approved full-applicat
 | Test traceability | Complete | `test-traceability.md` |
 | Operations | Complete | `operations.md` |
 | Manual usability | Complete | `manual-usability.md` |
+| Engineering quality | Complete | `engineering-quality.md` |
 | Final synthesis | Pending | `final-report.md` |
+
