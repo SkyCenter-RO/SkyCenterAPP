@@ -7,7 +7,6 @@ use App\Filament\Resources\AutomationWebhookLogs\Pages\EditAutomationWebhookLog;
 use App\Filament\Resources\AutomationWebhookLogs\Pages\ListAutomationWebhookLogs;
 use App\Filament\Resources\AutomationWebhookLogs\Schemas\AutomationWebhookLogForm;
 use App\Filament\Resources\AutomationWebhookLogs\Tables\AutomationWebhookLogsTable;
-use App\Filament\Resources\AutomationWebhookLogs\RelationManagers;
 use App\Models\AutomationWebhookLog;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;

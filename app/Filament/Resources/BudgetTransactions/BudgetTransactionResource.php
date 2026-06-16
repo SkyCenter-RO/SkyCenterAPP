@@ -8,6 +8,7 @@ use App\Filament\Resources\BudgetTransactions\Pages\ListBudgetTransactions;
 use App\Filament\Resources\BudgetTransactions\Schemas\BudgetTransactionForm;
 use App\Filament\Resources\BudgetTransactions\Tables\BudgetTransactionsTable;
 use App\Models\BudgetTransaction;
+use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -35,7 +36,7 @@ class BudgetTransactionResource extends Resource
     {
         $user = Filament::auth()->user();
 
-        return $user instanceof \App\Models\User && $user->isAdmin();
+        return $user instanceof User && $user->isAdmin();
     }
 
     public static function form(Schema $schema): Schema

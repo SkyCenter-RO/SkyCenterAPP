@@ -35,7 +35,7 @@ class UserResource extends Resource
     {
         $user = Filament::auth()->user();
 
-        return $user instanceof \App\Models\User && $user->isAdmin();
+        return $user instanceof User && $user->isAdmin();
     }
 
     public static function form(Schema $schema): Schema

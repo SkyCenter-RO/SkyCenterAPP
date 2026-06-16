@@ -2,21 +2,23 @@
 
 namespace App\Filament\Pages;
 
+use App\Actions\Scheduling\ParseSchedulePdfAction;
 use App\Models\LodgingReservation;
 use App\Models\ParkingLot;
 use App\Models\ParkingReservation;
 use App\Models\RentContract;
 use App\Models\RentVehicle;
 use App\Models\Room;
+use App\Models\User;
+use App\Models\WorkShift;
 use Carbon\CarbonImmutable;
-use Filament\Facades\Filament;
-use Filament\Pages\Page;
-use Livewire\Attributes\Url;
-use App\Actions\Scheduling\ParseSchedulePdfAction;
 use Filament\Actions\Action;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
+use Filament\Pages\Page;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\Url;
 
 class OrdineaDeZi extends Page
 {
@@ -225,7 +227,7 @@ class OrdineaDeZi extends Page
                 ])
                 ->action(function (array $data) {
                     $filePath = Storage::disk('local')->path($data['schedule_pdf']);
-                    
+
                     try {
                         $action = app(ParseSchedulePdfAction::class);
                         $result = $action->execute($filePath);
@@ -244,7 +246,7 @@ class OrdineaDeZi extends Page
                     } finally {
                         Storage::disk('local')->delete($data['schedule_pdf']);
                     }
-                })
+                }),
         ];
     }
 
@@ -255,13 +257,13 @@ class OrdineaDeZi extends Page
     {
         $date = $this->selectedDate;
 
-        $dayShift = \App\Models\WorkShift::query()
+        $dayShift = WorkShift::query()
             ->with('user')
             ->where('date', $date)
             ->where('shift_type', 'zi')
             ->first();
 
-        $nightShift = \App\Models\WorkShift::query()
+        $nightShift = WorkShift::query()
             ->with('user')
             ->where('date', $date)
             ->where('shift_type', 'noapte')
@@ -278,8 +280,8 @@ class OrdineaDeZi extends Page
         $user = Filament::auth()->user();
         $panel = Filament::getCurrentPanel();
 
-        return $user instanceof \App\Models\User 
-            && $user->is_active 
+        return $user instanceof User
+            && $user->is_active
             && ($panel ? $user->canAccessPanel($panel) : $user->hasValidRole());
     }
 }

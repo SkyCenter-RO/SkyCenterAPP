@@ -12,14 +12,14 @@ class TelegramIncomeController extends Controller
     public function __invoke(Request $request, ProcessIncomeTelegramUpdate $action): JsonResponse
     {
         $validated = $request->validate([
-            'update_type'       => 'required|in:message,callback_query',
-            'chat_id'           => 'required|string',
-            'user_id'           => 'required|string',
-            'username'          => 'nullable|string',
-            'message_id'        => 'nullable|integer',
-            'text'              => 'nullable|string|max:512',
+            'update_type' => 'required|in:message,callback_query',
+            'chat_id' => 'required|string',
+            'user_id' => 'required|string',
+            'username' => 'nullable|string',
+            'message_id' => 'nullable|integer',
+            'text' => 'nullable|string|max:512',
             'callback_query_id' => 'nullable|string',
-            'callback_data'     => 'nullable|string|max:64',
+            'callback_data' => 'nullable|string|max:64',
         ]);
 
         $result = $action->handle($validated);

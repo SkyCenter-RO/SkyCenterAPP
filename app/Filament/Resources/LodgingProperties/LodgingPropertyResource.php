@@ -7,7 +7,6 @@ use App\Filament\Resources\LodgingProperties\Pages\EditLodgingProperty;
 use App\Filament\Resources\LodgingProperties\Pages\ListLodgingProperties;
 use App\Filament\Resources\LodgingProperties\Schemas\LodgingPropertyForm;
 use App\Filament\Resources\LodgingProperties\Tables\LodgingPropertiesTable;
-use App\Filament\Resources\LodgingProperties\RelationManagers;
 use App\Models\LodgingProperty;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;

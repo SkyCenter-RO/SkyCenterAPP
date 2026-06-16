@@ -25,23 +25,23 @@ class ParseSchedulePdfAction
 
     public function execute(string $filePath): array
     {
-        if (!file_exists($filePath)) {
+        if (! file_exists($filePath)) {
             throw new \InvalidArgumentException("Fișierul nu există la calea: {$filePath}");
         }
 
-        $parser = new Parser();
+        $parser = new Parser;
         $pdf = $parser->parseFile($filePath);
         $text = $pdf->getText();
 
         // Extract month & year from header
-        if (!preg_match('/Program Ture\s*-\s*(?P<month>[a-zA-ZăâîșțĂÂÎȘȚ]+)\s+(?P<year>\d{4})/ui', $text, $matches)) {
+        if (! preg_match('/Program Ture\s*-\s*(?P<month>[a-zA-ZăâîșțĂÂÎȘȚ]+)\s+(?P<year>\d{4})/ui', $text, $matches)) {
             throw new \RuntimeException('Nu s-a putut găsi antetul cu luna și anul în PDF.');
         }
 
         $monthName = mb_strtolower($matches['month']);
         $year = (int) $matches['year'];
 
-        if (!isset(self::MONTHS_MAP[$monthName])) {
+        if (! isset(self::MONTHS_MAP[$monthName])) {
             throw new \RuntimeException("Luna necunoscută: {$matches['month']}");
         }
 
@@ -61,14 +61,14 @@ class ParseSchedulePdfAction
                 $ziName = trim($rowMatches['zi']);
                 $noapteName = trim($rowMatches['noapte']);
 
-                $ziUser = $operators->first(fn($u) => mb_strtolower($u->name) === mb_strtolower($ziName));
-                $noapteUser = $operators->first(fn($u) => mb_strtolower($u->name) === mb_strtolower($noapteName));
+                $ziUser = $operators->first(fn ($u) => mb_strtolower($u->name) === mb_strtolower($ziName));
+                $noapteUser = $operators->first(fn ($u) => mb_strtolower($u->name) === mb_strtolower($noapteName));
 
                 WorkShift::query()->updateOrCreate(
                     ['date' => $dateString, 'shift_type' => 'zi'],
                     [
                         'user_id' => $ziUser?->id,
-                        'raw_employee_name' => $ziName
+                        'raw_employee_name' => $ziName,
                     ]
                 );
 
@@ -76,7 +76,7 @@ class ParseSchedulePdfAction
                     ['date' => $dateString, 'shift_type' => 'noapte'],
                     [
                         'user_id' => $noapteUser?->id,
-                        'raw_employee_name' => $noapteName
+                        'raw_employee_name' => $noapteName,
                     ]
                 );
 

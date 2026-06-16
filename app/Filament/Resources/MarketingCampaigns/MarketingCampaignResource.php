@@ -8,6 +8,7 @@ use App\Filament\Resources\MarketingCampaigns\Pages\ListMarketingCampaigns;
 use App\Filament\Resources\MarketingCampaigns\Schemas\MarketingCampaignForm;
 use App\Filament\Resources\MarketingCampaigns\Tables\MarketingCampaignsTable;
 use App\Models\MarketingCampaign;
+use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -35,7 +36,7 @@ class MarketingCampaignResource extends Resource
     {
         $user = Filament::auth()->user();
 
-        return $user instanceof \App\Models\User && $user->isAdmin();
+        return $user instanceof User && $user->isAdmin();
     }
 
     public static function form(Schema $schema): Schema
@@ -56,9 +57,9 @@ class MarketingCampaignResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListMarketingCampaigns::route('/'),
+            'index' => ListMarketingCampaigns::route('/'),
             'create' => CreateMarketingCampaign::route('/create'),
-            'edit'   => EditMarketingCampaign::route('/{record}/edit'),
+            'edit' => EditMarketingCampaign::route('/{record}/edit'),
         ];
     }
 }

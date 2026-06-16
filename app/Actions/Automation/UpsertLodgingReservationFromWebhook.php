@@ -35,7 +35,7 @@ class UpsertLodgingReservationFromWebhook
                 ->lockForUpdate()
                 ->first();
 
-            $reservation = $existing ?? new LodgingReservation();
+            $reservation = $existing ?? new LodgingReservation;
             $reservation->fill([
                 'source' => $source,
                 'external_id' => $externalId,

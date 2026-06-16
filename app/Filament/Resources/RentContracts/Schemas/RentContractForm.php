@@ -2,10 +2,11 @@
 
 namespace App\Filament\Resources\RentContracts\Schemas;
 
+use App\Models\RentContract;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
 class RentContractForm
@@ -44,20 +45,20 @@ class RentContractForm
                                 return;
                             }
 
-                            $overlap = \App\Models\RentContract::query()
+                            $overlap = RentContract::query()
                                 ->where('rent_vehicle_id', $vehicleId)
                                 ->when($record, fn ($q) => $q->where('id', '!=', $record->id))
                                 ->where('status', '!=', 'cancelled')
                                 ->where(function ($query) use ($startDate, $value) {
                                     $query->where('start_date', '<', $value)
-                                          ->where('end_date', '>', $startDate);
+                                        ->where('end_date', '>', $startDate);
                                 })
                                 ->exists();
 
                             if ($overlap) {
                                 $fail('Acest vehicul este deja închiriat pentru perioada selectată.');
                             }
-                        }
+                        },
                     ]),
                 TextInput::make('km_at_handover')
                     ->numeric(),

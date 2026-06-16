@@ -8,6 +8,7 @@ use App\Filament\Resources\MarketingContentCalendar\Pages\ListMarketingContentCa
 use App\Filament\Resources\MarketingContentCalendar\Schemas\MarketingContentCalendarForm;
 use App\Filament\Resources\MarketingContentCalendar\Tables\MarketingContentCalendarTable;
 use App\Models\MarketingContentCalendar;
+use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -35,7 +36,7 @@ class MarketingContentCalendarResource extends Resource
     {
         $user = Filament::auth()->user();
 
-        return $user instanceof \App\Models\User && $user->isAdmin();
+        return $user instanceof User && $user->isAdmin();
     }
 
     public static function form(Schema $schema): Schema
@@ -56,9 +57,9 @@ class MarketingContentCalendarResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListMarketingContentCalendars::route('/'),
+            'index' => ListMarketingContentCalendars::route('/'),
             'create' => CreateMarketingContentCalendar::route('/create'),
-            'edit'   => EditMarketingContentCalendar::route('/{record}/edit'),
+            'edit' => EditMarketingContentCalendar::route('/{record}/edit'),
         ];
     }
 }

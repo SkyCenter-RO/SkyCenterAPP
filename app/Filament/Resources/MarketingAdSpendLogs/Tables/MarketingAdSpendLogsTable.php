@@ -35,10 +35,10 @@ class MarketingAdSpendLogsTable
             ->filters([
                 SelectFilter::make('platform')
                     ->options([
-                        'google'    => 'Google',
-                        'facebook'  => 'Facebook',
+                        'google' => 'Google',
+                        'facebook' => 'Facebook',
                         'instagram' => 'Instagram',
-                        'tiktok'    => 'TikTok',
+                        'tiktok' => 'TikTok',
                     ]),
             ])
             ->recordActions([

@@ -27,11 +27,11 @@ class MarketingCampaignsTable
                 TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'active'    => 'success',
-                        'paused'    => 'warning',
+                        'active' => 'success',
+                        'paused' => 'warning',
                         'completed' => 'gray',
-                        'draft'     => 'info',
-                        default     => 'gray',
+                        'draft' => 'info',
+                        default => 'gray',
                     })
                     ->sortable(),
                 TextColumn::make('period_month')
@@ -54,23 +54,23 @@ class MarketingCampaignsTable
             ->filters([
                 SelectFilter::make('platform')
                     ->options([
-                        'google'    => 'Google',
-                        'facebook'  => 'Facebook',
+                        'google' => 'Google',
+                        'facebook' => 'Facebook',
                         'instagram' => 'Instagram',
-                        'tiktok'    => 'TikTok',
-                        'bing'      => 'Bing',
+                        'tiktok' => 'TikTok',
+                        'bing' => 'Bing',
                     ]),
                 SelectFilter::make('vertical')
                     ->options([
                         'parcare' => 'Parcare',
-                        'hotel'   => 'Hotel',
-                        'rent'    => 'Rent-a-car',
-                        'bundle'  => 'Bundle',
+                        'hotel' => 'Hotel',
+                        'rent' => 'Rent-a-car',
+                        'bundle' => 'Bundle',
                     ]),
                 SelectFilter::make('status')
                     ->options([
-                        'active'    => 'Activ',
-                        'paused'    => 'Pauzat',
+                        'active' => 'Activ',
+                        'paused' => 'Pauzat',
                         'completed' => 'Finalizat',
                     ]),
             ])

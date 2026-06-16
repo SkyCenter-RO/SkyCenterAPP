@@ -13,7 +13,7 @@ class MarketingAdSpendLog extends Model
     ];
 
     protected $casts = [
-        'spent_on'   => 'date',
+        'spent_on' => 'date',
         'amount_eur' => 'decimal:2',
     ];
 

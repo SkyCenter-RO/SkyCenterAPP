@@ -18,7 +18,7 @@ class TelegramSession extends Model
     ];
 
     protected $casts = [
-        'data'       => 'array',
+        'data' => 'array',
         'expires_at' => 'datetime',
     ];
 
@@ -33,8 +33,8 @@ class TelegramSession extends Model
             ['chat_id' => $chatId, 'user_id' => $userId],
             [
                 'group_type' => $groupType,
-                'state'      => 'start',
-                'data'       => [],
+                'state' => 'start',
+                'data' => [],
                 'expires_at' => now()->addMinutes(30),
             ]
         );
@@ -44,12 +44,14 @@ class TelegramSession extends Model
     {
         $this->fill(array_merge(['expires_at' => now()->addMinutes(30)], $merge));
         $this->save();
+
         return $this;
     }
 
     public function mergeData(array $data): static
     {
         $this->data = array_merge($this->data ?? [], $data);
+
         return $this;
     }
 }

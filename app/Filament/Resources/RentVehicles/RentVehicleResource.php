@@ -7,7 +7,6 @@ use App\Filament\Resources\RentVehicles\Pages\EditRentVehicle;
 use App\Filament\Resources\RentVehicles\Pages\ListRentVehicles;
 use App\Filament\Resources\RentVehicles\Schemas\RentVehicleForm;
 use App\Filament\Resources\RentVehicles\Tables\RentVehiclesTable;
-use App\Filament\Resources\RentVehicles\RelationManagers;
 use App\Models\RentVehicle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;

@@ -4,8 +4,8 @@ namespace App\Filament\Resources\MarketingCampaigns\Schemas;
 
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
 class MarketingCampaignForm
@@ -20,30 +20,30 @@ class MarketingCampaignForm
             Select::make('platform')
                 ->required()
                 ->options([
-                    'google'    => 'Google',
-                    'facebook'  => 'Facebook',
+                    'google' => 'Google',
+                    'facebook' => 'Facebook',
                     'instagram' => 'Instagram',
-                    'tiktok'    => 'TikTok',
-                    'bing'      => 'Bing',
-                    'other'     => 'Altul',
+                    'tiktok' => 'TikTok',
+                    'bing' => 'Bing',
+                    'other' => 'Altul',
                 ]),
             Select::make('vertical')
                 ->required()
                 ->options([
                     'parcare' => 'Parcare',
-                    'hotel'   => 'Hotel',
-                    'rent'    => 'Rent-a-car',
-                    'bundle'  => 'Bundle',
+                    'hotel' => 'Hotel',
+                    'rent' => 'Rent-a-car',
+                    'bundle' => 'Bundle',
                     'general' => 'General',
                 ]),
             Select::make('status')
                 ->required()
                 ->default('active')
                 ->options([
-                    'active'    => 'Activ',
-                    'paused'    => 'Pauzat',
+                    'active' => 'Activ',
+                    'paused' => 'Pauzat',
                     'completed' => 'Finalizat',
-                    'draft'     => 'Draft',
+                    'draft' => 'Draft',
                 ]),
             DatePicker::make('period_month')
                 ->required()

@@ -5,8 +5,8 @@ namespace App\Filament\Resources\MarketingAdSpendLogs\Schemas;
 use App\Models\MarketingCampaign;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
 class MarketingAdSpendLogForm
@@ -22,20 +22,20 @@ class MarketingAdSpendLogForm
             Select::make('platform')
                 ->required()
                 ->options([
-                    'google'    => 'Google',
-                    'facebook'  => 'Facebook',
+                    'google' => 'Google',
+                    'facebook' => 'Facebook',
                     'instagram' => 'Instagram',
-                    'tiktok'    => 'TikTok',
-                    'bing'      => 'Bing',
-                    'other'     => 'Altul',
+                    'tiktok' => 'TikTok',
+                    'bing' => 'Bing',
+                    'other' => 'Altul',
                 ]),
             Select::make('vertical')
                 ->nullable()
                 ->options([
                     'parcare' => 'Parcare',
-                    'hotel'   => 'Hotel',
-                    'rent'    => 'Rent-a-car',
-                    'bundle'  => 'Bundle',
+                    'hotel' => 'Hotel',
+                    'rent' => 'Rent-a-car',
+                    'bundle' => 'Bundle',
                     'general' => 'General',
                 ]),
             TextInput::make('amount_eur')

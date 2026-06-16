@@ -2,11 +2,12 @@
 
 namespace App\Filament\Resources\LodgingReservations\Schemas;
 
+use App\Models\LodgingReservation;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
 class LodgingReservationForm
@@ -43,20 +44,20 @@ class LodgingReservationForm
                                 return;
                             }
 
-                            $overlap = \App\Models\LodgingReservation::query()
+                            $overlap = LodgingReservation::query()
                                 ->where('room_id', $roomId)
                                 ->when($record, fn ($q) => $q->where('id', '!=', $record->id))
                                 ->where('status', '!=', 'cancelled')
                                 ->where(function ($query) use ($checkIn, $value) {
                                     $query->where('check_in', '<', $value)
-                                          ->where('check_out', '>', $checkIn);
+                                        ->where('check_out', '>', $checkIn);
                                 })
                                 ->exists();
 
                             if ($overlap) {
                                 $fail('Această cameră este deja rezervată pentru perioada selectată.');
                             }
-                        }
+                        },
                     ]),
                 TextInput::make('nights')
                     ->numeric(),

@@ -7,9 +7,7 @@ use App\Models\LodgingReservation;
 
 class LodgingReservationObserver
 {
-    public function __construct(private QueueConfirmationMessage $queueConfirmation)
-    {
-    }
+    public function __construct(private QueueConfirmationMessage $queueConfirmation) {}
 
     public function created(LodgingReservation $reservation): void
     {

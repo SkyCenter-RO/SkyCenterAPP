@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\OrdineaDeZi;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -28,7 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->homeUrl(fn (): string => \App\Filament\Pages\OrdineaDeZi::getUrl(panel: 'admin'))
+            ->homeUrl(fn (): string => OrdineaDeZi::getUrl(panel: 'admin'))
             ->colors([
                 'primary' => Color::Amber,
             ])

@@ -8,6 +8,7 @@ use App\Filament\Resources\BudgetCategories\Pages\ListBudgetCategories;
 use App\Filament\Resources\BudgetCategories\Schemas\BudgetCategoryForm;
 use App\Filament\Resources\BudgetCategories\Tables\BudgetCategoriesTable;
 use App\Models\BudgetCategory;
+use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -35,7 +36,7 @@ class BudgetCategoryResource extends Resource
     {
         $user = Filament::auth()->user();
 
-        return $user instanceof \App\Models\User && $user->isAdmin();
+        return $user instanceof User && $user->isAdmin();
     }
 
     public static function form(Schema $schema): Schema

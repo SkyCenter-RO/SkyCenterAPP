@@ -8,6 +8,7 @@ use App\Filament\Resources\MarketingReviews\Pages\ListMarketingReviews;
 use App\Filament\Resources\MarketingReviews\Schemas\MarketingReviewForm;
 use App\Filament\Resources\MarketingReviews\Tables\MarketingReviewsTable;
 use App\Models\MarketingReview;
+use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -35,7 +36,7 @@ class MarketingReviewResource extends Resource
     {
         $user = Filament::auth()->user();
 
-        return $user instanceof \App\Models\User && $user->isAdmin();
+        return $user instanceof User && $user->isAdmin();
     }
 
     public static function form(Schema $schema): Schema
@@ -56,9 +57,9 @@ class MarketingReviewResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListMarketingReviews::route('/'),
+            'index' => ListMarketingReviews::route('/'),
             'create' => CreateMarketingReview::route('/create'),
-            'edit'   => EditMarketingReview::route('/{record}/edit'),
+            'edit' => EditMarketingReview::route('/{record}/edit'),
         ];
     }
 }

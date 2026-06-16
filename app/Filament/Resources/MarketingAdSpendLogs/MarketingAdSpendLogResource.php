@@ -8,6 +8,7 @@ use App\Filament\Resources\MarketingAdSpendLogs\Pages\ListMarketingAdSpendLogs;
 use App\Filament\Resources\MarketingAdSpendLogs\Schemas\MarketingAdSpendLogForm;
 use App\Filament\Resources\MarketingAdSpendLogs\Tables\MarketingAdSpendLogsTable;
 use App\Models\MarketingAdSpendLog;
+use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -35,7 +36,7 @@ class MarketingAdSpendLogResource extends Resource
     {
         $user = Filament::auth()->user();
 
-        return $user instanceof \App\Models\User && $user->isAdmin();
+        return $user instanceof User && $user->isAdmin();
     }
 
     public static function form(Schema $schema): Schema
@@ -56,9 +57,9 @@ class MarketingAdSpendLogResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListMarketingAdSpendLogs::route('/'),
+            'index' => ListMarketingAdSpendLogs::route('/'),
             'create' => CreateMarketingAdSpendLog::route('/create'),
-            'edit'   => EditMarketingAdSpendLog::route('/{record}/edit'),
+            'edit' => EditMarketingAdSpendLog::route('/{record}/edit'),
         ];
     }
 }

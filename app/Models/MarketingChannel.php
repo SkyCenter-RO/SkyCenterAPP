@@ -12,7 +12,7 @@ class MarketingChannel extends Model
     ];
 
     protected $casts = [
-        'last_reviewed_at'   => 'date',
+        'last_reviewed_at' => 'date',
         'monthly_budget_eur' => 'decimal:2',
     ];
 }

@@ -16,10 +16,10 @@ class MarketingCampaign extends Model
 
     protected $casts = [
         'period_month' => 'date',
-        'budget_eur'   => 'decimal:2',
-        'spend_eur'    => 'decimal:2',
-        'cpc_eur'      => 'decimal:4',
-        'roas'         => 'decimal:2',
+        'budget_eur' => 'decimal:2',
+        'spend_eur' => 'decimal:2',
+        'cpc_eur' => 'decimal:4',
+        'roas' => 'decimal:2',
     ];
 
     public function createdBy(): BelongsTo

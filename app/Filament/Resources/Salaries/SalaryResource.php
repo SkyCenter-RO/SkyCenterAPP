@@ -8,6 +8,7 @@ use App\Filament\Resources\Salaries\Pages\ListSalaries;
 use App\Filament\Resources\Salaries\Schemas\SalaryForm;
 use App\Filament\Resources\Salaries\Tables\SalariesTable;
 use App\Models\Salary;
+use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -35,7 +36,7 @@ class SalaryResource extends Resource
     {
         $user = Filament::auth()->user();
 
-        return $user instanceof \App\Models\User && $user->isAdmin();
+        return $user instanceof User && $user->isAdmin();
     }
 
     public static function form(Schema $schema): Schema

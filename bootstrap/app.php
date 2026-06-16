@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\AuthenticateAutomationToken;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -13,7 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'automation.token' => \App\Http\Middleware\AuthenticateAutomationToken::class,
+            'automation.token' => AuthenticateAutomationToken::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

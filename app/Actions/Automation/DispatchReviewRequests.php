@@ -10,9 +10,7 @@ use App\Models\ParkingReservation;
 
 class DispatchReviewRequests
 {
-    public function __construct(private RenderMessageTemplate $renderMessageTemplate)
-    {
-    }
+    public function __construct(private RenderMessageTemplate $renderMessageTemplate) {}
 
     /**
      * @return array{parking_queued: int, lodging_queued: int, skipped: int}

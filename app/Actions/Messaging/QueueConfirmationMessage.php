@@ -9,9 +9,7 @@ use App\Models\ParkingReservation;
 
 class QueueConfirmationMessage
 {
-    public function __construct(private RenderMessageTemplate $renderMessageTemplate)
-    {
-    }
+    public function __construct(private RenderMessageTemplate $renderMessageTemplate) {}
 
     public function handleParking(ParkingReservation $reservation): void
     {

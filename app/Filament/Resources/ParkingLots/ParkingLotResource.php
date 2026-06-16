@@ -7,7 +7,6 @@ use App\Filament\Resources\ParkingLots\Pages\EditParkingLot;
 use App\Filament\Resources\ParkingLots\Pages\ListParkingLots;
 use App\Filament\Resources\ParkingLots\Schemas\ParkingLotForm;
 use App\Filament\Resources\ParkingLots\Tables\ParkingLotsTable;
-use App\Filament\Resources\ParkingLots\RelationManagers;
 use App\Models\ParkingLot;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;

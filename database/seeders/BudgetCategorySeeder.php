@@ -32,13 +32,13 @@ class BudgetCategorySeeder extends Seeder
 
         foreach ($categories as $cat) {
             DB::table('budget_categories')->insert([
-                'service'    => $cat['service'],
-                'name'       => $cat['name'],
-                'kind'       => 'expense',
-                'frequency'  => 'once',
-                'currency'   => 'RON',
-                'is_active'  => true,
-                'metadata'   => json_encode(['emoji' => $cat['emoji']]),
+                'service' => $cat['service'],
+                'name' => $cat['name'],
+                'kind' => 'expense',
+                'frequency' => 'once',
+                'currency' => 'RON',
+                'is_active' => true,
+                'metadata' => json_encode(['emoji' => $cat['emoji']]),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

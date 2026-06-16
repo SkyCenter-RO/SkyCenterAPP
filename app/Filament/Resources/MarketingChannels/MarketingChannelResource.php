@@ -8,6 +8,7 @@ use App\Filament\Resources\MarketingChannels\Pages\ListMarketingChannels;
 use App\Filament\Resources\MarketingChannels\Schemas\MarketingChannelForm;
 use App\Filament\Resources\MarketingChannels\Tables\MarketingChannelsTable;
 use App\Models\MarketingChannel;
+use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -35,7 +36,7 @@ class MarketingChannelResource extends Resource
     {
         $user = Filament::auth()->user();
 
-        return $user instanceof \App\Models\User && $user->isAdmin();
+        return $user instanceof User && $user->isAdmin();
     }
 
     public static function form(Schema $schema): Schema
@@ -56,9 +57,9 @@ class MarketingChannelResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListMarketingChannels::route('/'),
+            'index' => ListMarketingChannels::route('/'),
             'create' => CreateMarketingChannel::route('/create'),
-            'edit'   => EditMarketingChannel::route('/{record}/edit'),
+            'edit' => EditMarketingChannel::route('/{record}/edit'),
         ];
     }
 }

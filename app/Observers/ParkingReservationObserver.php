@@ -7,9 +7,7 @@ use App\Models\ParkingReservation;
 
 class ParkingReservationObserver
 {
-    public function __construct(private QueueConfirmationMessage $queueConfirmation)
-    {
-    }
+    public function __construct(private QueueConfirmationMessage $queueConfirmation) {}
 
     public function created(ParkingReservation $reservation): void
     {

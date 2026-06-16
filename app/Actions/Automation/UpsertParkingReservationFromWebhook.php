@@ -37,7 +37,7 @@ class UpsertParkingReservationFromWebhook
                 ->lockForUpdate()
                 ->first();
 
-            $reservation = $existing ?? new ParkingReservation();
+            $reservation = $existing ?? new ParkingReservation;
             $reservation->fill([
                 'source' => 'parcare_form',
                 'external_id' => $externalId,

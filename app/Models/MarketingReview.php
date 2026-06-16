@@ -16,8 +16,8 @@ class MarketingReview extends Model
 
     protected $casts = [
         'recorded_on' => 'date',
-        'score'       => 'decimal:2',
-        'created_at'  => 'datetime',
+        'score' => 'decimal:2',
+        'created_at' => 'datetime',
     ];
 
     public function createdBy(): BelongsTo
