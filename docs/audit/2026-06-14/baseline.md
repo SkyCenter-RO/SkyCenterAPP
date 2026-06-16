@@ -287,7 +287,7 @@ Evidence was collected on 2026-06-14 and supplemented on 2026-06-16 in the linke
 ## Reproducibility Blockers
 
 - `SC-AUD-001`: the repository does not contain a committed npm lockfile, so the required clean-install command fails and the successful build depends on previously prepared local dependencies.
-- `SC-AUD-002`: the Compose configuration uses fixed published host ports. With the existing stack running, `docker compose up -d` from the worktree failed on application host port `8080`; the configuration also publishes PostgreSQL on host port `55433`, so concurrent worktrees require `APP_PORT` and `FORWARD_DB_PORT` coordination or parameterization.
+- `SC-AUD-002`: with the existing stack running, `docker compose up -d` from the worktree failed because application host port `8080` was already allocated. The Compose configuration also publishes PostgreSQL on host port `55433`, but that was not the observed startup failure in this run; concurrent worktrees require explicit `APP_PORT` and `FORWARD_DB_PORT` overrides or no host publishing.
 - The ephemeral application key was supplied only to one-off test containers and is intentionally omitted from this document.
 
 ## Baseline Findings
@@ -295,5 +295,5 @@ Evidence was collected on 2026-06-14 and supplemented on 2026-06-16 in the linke
 | ID | Severity | Class | Summary | Baseline evidence |
 |---|---|---|---|---|
 | `SC-AUD-001` | Medium | operational-gap | Clean npm installation is not reproducible because no lockfile is committed. | `npm ci` exited `1`; `npm run build` succeeded only with pre-existing `node_modules`. |
-| `SC-AUD-002` | Low | operational-gap | A second isolated Compose project cannot start while fixed published host ports are already used by the existing stack. | `docker compose up -d` failed on `0.0.0.0:8080`; Compose config also publishes PostgreSQL on `55433`. |
+| `SC-AUD-002` | Low | operational-gap | Isolated Compose project cannot start while the existing app port is in use. | `docker compose up -d` failed on `0.0.0.0:8080`; Compose config also shows default published ports `8080` and `55433`. |
 | `SC-AUD-003` | Low | maintainability | The repository does not pass its Pint formatting check. | Pint exited `1` with `78` style issues in `302` checked files. |
