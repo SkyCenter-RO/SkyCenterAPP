@@ -55,7 +55,7 @@ component_type,domain,path_or_route,responsibility,entry_point,dependencies,side
 | Surface | Request paths | Evidence |
 |---|---|---|
 | Public web | `GET|HEAD /` | `routes/web.php:5`; route inventory row `GET|HEAD /` |
-| Web panel | `admin/*`, including Filament login/dashboard/resource routes | `app/Providers/Filament/AdminPanelProvider.php:30` sets panel path `admin`; route inventory has 76 `admin/*` rows |
+| Web panel | `admin/*`, including Filament login/dashboard/resource routes | `app/Providers/Filament/AdminPanelProvider.php:29` sets panel path `admin`; route inventory has 76 `admin/*` rows |
 | Automation API | `POST api/automation/parking-reservations`, `POST api/automation/lodging-reservations`, `POST api/automation/dispatch-review-requests`, `GET api/automation/outbound-messages`, `POST api/automation/outbound-messages/{outboundMessage}/callback` | `routes/api.php:10-15` |
 | Telegram | `POST api/automation/telegram/income`, `POST api/automation/telegram/expense` | `routes/api.php:16-17`; `docs/telegram-bot-setup.md:28-71` describes n8n/Telegram workflow ownership |
 | Uploads | Filament `admin/ordinea-de-zi` header action uploads `schedule_pdf` to `local` disk directory `temp-schedules` | `app/Filament/Pages/OrdineaDeZi.php:220-245` |
@@ -128,11 +128,12 @@ These are not classified as defects in Task 3. They are evidence gaps for later 
 
 ## Specification Drift
 
-One conservative spec-drift row is included in the CSV and no new finding was added yet:
+Two conservative spec-drift rows are included in the CSV and no new finding was added yet:
 
 | Component | Drift | Evidence |
 |---|---|---|
-| `AutomationWebhookLogResource` | The web-app spec describes `Jurnal automatizari` / `automation_*` as read-only, but the current Filament resource has edit routing and table edit/delete actions while only `canCreate()` is disabled. This should be reviewed in the security/manual tasks before deciding severity. | Spec: `docs/superpowers/specs/2026-06-08-skycenter-web-app-design.md:24,70,76`; resource: `app/Filament/Resources/AutomationWebhookLogs/AutomationWebhookLogResource.php:34-37,56-61`; table actions: `app/Filament/Resources/AutomationWebhookLogs/Tables/AutomationWebhookLogsTable.php:36-41` |
+| `AutomationWebhookLogResource` | The web-app spec describes `Jurnal automatizari` / `automation_*` as read-only, but the current Filament resource has edit routing and table edit/delete actions while only `canCreate()` is disabled. This should be reviewed in the security/manual tasks before deciding severity. | Spec: `docs/superpowers/specs/2026-06-08-skycenter-web-app-design.md:24,70,76`; resource: `app/Filament/Resources/AutomationWebhookLogs/AutomationWebhookLogResource.php:34-37,56-61`; table actions: `app/Filament/Resources/AutomationWebhookLogs/Tables/AutomationWebhookLogsTable.php:52-58` |
+| `OutboundMessageResource` | The web-app spec places `outbound_messages` in a read-only integration context, but the current Filament resource exposes create and edit routes, list-page create action, edit-page delete action, and table edit/delete actions. This should be reviewed in the security/manual tasks before deciding severity. | Spec: `docs/superpowers/specs/2026-06-08-skycenter-web-app-design.md:76`; resource routes: `app/Filament/Resources/OutboundMessages/OutboundMessageResource.php:50-56`; table actions: `app/Filament/Resources/OutboundMessages/Tables/OutboundMessagesTable.php:46-52`; list create action: `app/Filament/Resources/OutboundMessages/Pages/ListOutboundMessages.php:13-17`; edit delete action: `app/Filament/Resources/OutboundMessages/Pages/EditOutboundMessage.php:13-17` |
 
 ## Route Count Validation
 
@@ -150,4 +151,4 @@ Expected and observed result: `routes=84 inventory_routes=84`.
 
 ## Findings Register Impact
 
-`docs/audit/2026-06-14/findings.csv` was not changed in Task 3. The inventory documents evidence gaps and one spec-drift candidate, but none were promoted to a new finding without the later authorization/manual workflow validation tasks.
+`docs/audit/2026-06-14/findings.csv` was not changed in Task 3. The inventory documents evidence gaps and two spec-drift candidates, but none were promoted to a new finding without the later authorization/manual workflow validation tasks.
