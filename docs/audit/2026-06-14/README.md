@@ -45,6 +45,8 @@ This directory contains the evidence and findings for the approved full-applicat
 | Manual usability | Complete | `manual-usability.md` |
 | Engineering quality | Complete | `engineering-quality.md` |
 | Workflow status | Complete | `missing-workflows.md` |
+| Documentation plan | Complete | `operations-plan.md` |
 | Final synthesis | Pending | `final-report.md` |
+
 
 
