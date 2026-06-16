@@ -36,7 +36,7 @@ class LodgingReservationForm
                     ->required()
                     ->after('check_in')
                     ->rules([
-                        fn (\Filament\Forms\Get $get, $record) => function (string $attribute, $value, \Closure $fail) use ($get, $record) {
+                        fn ($get, $record) => function (string $attribute, $value, \Closure $fail) use ($get, $record) {
                             $checkIn = $get('check_in');
                             $roomId = $get('room_id');
                             if (! $checkIn || ! $roomId || ! $value) {

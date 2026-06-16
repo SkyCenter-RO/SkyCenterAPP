@@ -30,7 +30,7 @@ class RentContractForm
                     ->required()
                     ->after('start_date')
                     ->rules([
-                        fn (\Filament\Forms\Get $get, $record) => function (string $attribute, $value, \Closure $fail) use ($get, $record) {
+                        fn ($get, $record) => function (string $attribute, $value, \Closure $fail) use ($get, $record) {
                             $startDate = $get('start_date');
                             $vehicleId = $get('rent_vehicle_id');
                             if (! $startDate || ! $vehicleId || ! $value) {
