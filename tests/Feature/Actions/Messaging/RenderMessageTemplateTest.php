@@ -24,7 +24,7 @@ class RenderMessageTemplateTest extends TestCase
             'is_active' => true,
         ]);
 
-        $action = new RenderMessageTemplate();
+        $action = new RenderMessageTemplate;
 
         $result = $action->handle('parking', 'confirmation', [
             'name' => 'Ion',
@@ -49,7 +49,7 @@ class RenderMessageTemplateTest extends TestCase
             'is_active' => false,
         ]);
 
-        $action = new RenderMessageTemplate();
+        $action = new RenderMessageTemplate;
 
         $result = $action->handle('parking', 'confirmation', ['name' => 'Ion']);
 
@@ -58,7 +58,7 @@ class RenderMessageTemplateTest extends TestCase
 
     public function test_returns_null_when_template_missing(): void
     {
-        $action = new RenderMessageTemplate();
+        $action = new RenderMessageTemplate;
 
         $result = $action->handle('lodging', 'review_request', ['guest_name' => 'Maria']);
 

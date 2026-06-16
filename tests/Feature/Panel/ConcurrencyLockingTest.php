@@ -23,7 +23,7 @@ class ConcurrencyLockingTest extends TestCase
     public function test_upsert_parking_reservation_acquires_lock(): void
     {
         $log = AutomationWebhookLog::create([
-            'source' => 'parcare_form',
+            'endpoint' => 'parcare_form',
             'payload' => [],
             'status' => 'pending',
         ]);
@@ -39,7 +39,7 @@ class ConcurrencyLockingTest extends TestCase
 
         DB::enableQueryLog();
 
-        $action = new UpsertParkingReservationFromWebhook();
+        $action = new UpsertParkingReservationFromWebhook;
         $action->handle($payload, $log);
 
         $queries = DB::getQueryLog();
@@ -60,7 +60,7 @@ class ConcurrencyLockingTest extends TestCase
     public function test_upsert_lodging_reservation_acquires_lock(): void
     {
         $log = AutomationWebhookLog::create([
-            'source' => 'cazare_form',
+            'endpoint' => 'cazare_form',
             'payload' => [],
             'status' => 'pending',
         ]);
@@ -76,7 +76,7 @@ class ConcurrencyLockingTest extends TestCase
 
         DB::enableQueryLog();
 
-        $action = new UpsertLodgingReservationFromWebhook();
+        $action = new UpsertLodgingReservationFromWebhook;
         $action->handle($payload, $log);
 
         $queries = DB::getQueryLog();
@@ -107,7 +107,7 @@ class ConcurrencyLockingTest extends TestCase
 
         DB::enableQueryLog();
 
-        $action = new ProcessIncomeTelegramUpdate();
+        $action = new ProcessIncomeTelegramUpdate;
         $action->handle($update);
 
         $queries = DB::getQueryLog();

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Scheduling;
 
+use App\Filament\Pages\OrdineaDeZi;
 use App\Models\User;
 use App\Models\WorkShift;
 use Filament\Facades\Filament;
@@ -10,7 +11,6 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 use Tests\TestCase;
-use App\Filament\Pages\OrdineaDeZi;
 
 class OrdineaDeZiUploadTest extends TestCase
 {
@@ -32,12 +32,11 @@ class OrdineaDeZiUploadTest extends TestCase
         $pdfFile = UploadedFile::fake()->create('Program_Iunie_2026_SkyCenter.pdf', filesize($realPdfPath), 'application/pdf');
         file_put_contents($pdfFile->getRealPath(), file_get_contents($realPdfPath));
 
-
         Livewire::actingAs($admin)
             ->test(OrdineaDeZi::class)
             ->assertActionVisible('uploadSchedule')
             ->callAction('uploadSchedule', [
-                'schedule_pdf' => $pdfFile
+                'schedule_pdf' => $pdfFile,
             ])
             ->assertHasNoActionErrors();
 
@@ -54,4 +53,3 @@ class OrdineaDeZiUploadTest extends TestCase
             ->assertActionHidden('uploadSchedule');
     }
 }
-

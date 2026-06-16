@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\Automation\LodgingReservationWebhookController;
 use App\Http\Controllers\Api\Automation\OutboundMessageCallbackController;
 use App\Http\Controllers\Api\Automation\OutboundMessagesController;
 use App\Http\Controllers\Api\Automation\ParkingReservationWebhookController;
+use App\Http\Controllers\Api\Automation\TelegramExpenseController;
+use App\Http\Controllers\Api\Automation\TelegramIncomeController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('automation.token')->prefix('automation')->group(function (): void {
@@ -13,6 +15,6 @@ Route::middleware('automation.token')->prefix('automation')->group(function (): 
     Route::post('dispatch-review-requests', DispatchReviewRequestsController::class);
     Route::get('outbound-messages', OutboundMessagesController::class);
     Route::post('outbound-messages/{outboundMessage}/callback', OutboundMessageCallbackController::class);
-    Route::post('telegram/income',  \App\Http\Controllers\Api\Automation\TelegramIncomeController::class);
-    Route::post('telegram/expense', \App\Http\Controllers\Api\Automation\TelegramExpenseController::class);
+    Route::post('telegram/income', TelegramIncomeController::class);
+    Route::post('telegram/expense', TelegramExpenseController::class);
 });

@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Messaging;
 
-use App\Models\AutomationEvent;
 use App\Models\LodgingProperty;
 use App\Models\LodgingReservation;
 use App\Models\MessageTemplate;

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Schema;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -18,7 +19,7 @@ class CommonSchemaTest extends TestCase
 
     public function test_users_role_check_rejects_invalid_value(): void
     {
-        $this->expectException(\Illuminate\Database\QueryException::class);
+        $this->expectException(QueryException::class);
 
         DB::table('users')->insert([
             'name' => 'X', 'email' => 'x@example.com', 'password' => 'x',
@@ -34,7 +35,7 @@ class CommonSchemaTest extends TestCase
 
     public function test_outbound_message_status_check_rejects_invalid_value(): void
     {
-        $this->expectException(\Illuminate\Database\QueryException::class);
+        $this->expectException(QueryException::class);
         DB::table('outbound_messages')->insert([
             'service' => 'parking', 'channel' => 'whatsapp', 'scheduled_at' => now(), 'status' => 'exploded',
         ]);
@@ -58,7 +59,7 @@ class CommonSchemaTest extends TestCase
     {
         $this->assertTrue(Schema::hasTable('work_shifts'));
         $this->assertTrue(Schema::hasColumns('work_shifts', [
-            'id', 'date', 'shift_type', 'user_id', 'raw_employee_name', 'created_at', 'updated_at'
+            'id', 'date', 'shift_type', 'user_id', 'raw_employee_name', 'created_at', 'updated_at',
         ]));
     }
 }

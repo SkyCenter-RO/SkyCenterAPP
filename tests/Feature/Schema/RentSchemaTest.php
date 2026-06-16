@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Schema;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -14,7 +15,7 @@ class RentSchemaTest extends TestCase
     public function test_rent_tables_exist(): void
     {
         foreach (['rent_vehicles', 'rent_vehicle_images', 'rent_clients',
-                  'rent_contracts', 'rent_maintenance_records'] as $table) {
+            'rent_contracts', 'rent_maintenance_records'] as $table) {
             $this->assertTrue(Schema::hasTable($table), "missing $table");
         }
         $this->assertTrue(Schema::hasColumns('rent_vehicles', [
@@ -32,13 +33,13 @@ class RentSchemaTest extends TestCase
 
     public function test_vehicle_status_check_rejects_invalid_value(): void
     {
-        $this->expectException(\Illuminate\Database\QueryException::class);
+        $this->expectException(QueryException::class);
         DB::table('rent_vehicles')->insert(['status' => 'crashed']);
     }
 
     public function test_contract_usage_type_check_rejects_invalid_value(): void
     {
-        $this->expectException(\Illuminate\Database\QueryException::class);
+        $this->expectException(QueryException::class);
         DB::table('rent_contracts')->insert(['usage_type' => 'taxi', 'status' => 'active']);
     }
 }

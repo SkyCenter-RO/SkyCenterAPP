@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Schema;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -14,8 +15,8 @@ class ParkingSchemaTest extends TestCase
     public function test_parking_tables_exist(): void
     {
         foreach (['parking_lots', 'parking_zones', 'parking_spaces', 'parking_customers',
-                  'parking_prices', 'parking_reservations', 'parking_reservation_images',
-                  'parking_status_audits'] as $table) {
+            'parking_prices', 'parking_reservations', 'parking_reservation_images',
+            'parking_status_audits'] as $table) {
             $this->assertTrue(Schema::hasTable($table), "missing $table");
         }
         $this->assertTrue(Schema::hasColumns('parking_reservations', [
@@ -27,7 +28,7 @@ class ParkingSchemaTest extends TestCase
 
     public function test_reservation_status_check_rejects_invalid_value(): void
     {
-        $this->expectException(\Illuminate\Database\QueryException::class);
+        $this->expectException(QueryException::class);
         DB::table('parking_reservations')->insert(['status' => 'flying']);
     }
 

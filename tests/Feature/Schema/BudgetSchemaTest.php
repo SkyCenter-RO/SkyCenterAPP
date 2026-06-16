@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Schema;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -22,7 +23,7 @@ class BudgetSchemaTest extends TestCase
 
     public function test_category_frequency_check_rejects_invalid_value(): void
     {
-        $this->expectException(\Illuminate\Database\QueryException::class);
+        $this->expectException(QueryException::class);
         DB::table('budget_categories')->insert([
             'service' => 'hotel', 'name' => 'apă', 'kind' => 'expense', 'frequency' => 'hourly',
         ]);
@@ -30,7 +31,7 @@ class BudgetSchemaTest extends TestCase
 
     public function test_transaction_type_check_rejects_invalid_value(): void
     {
-        $this->expectException(\Illuminate\Database\QueryException::class);
+        $this->expectException(QueryException::class);
         DB::table('budget_transactions')->insert([
             'type' => 'refund', 'amount' => 10, 'occurred_on' => now()->toDateString(),
         ]);

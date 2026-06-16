@@ -2,19 +2,20 @@
 
 namespace Tests\Feature\Telegram;
 
-use App\Models\BudgetTransaction;
+use App\Models\BudgetCategory;
 use App\Models\TelegramSession;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
 class ExpenseTelegramWizardTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function expensePost(array $payload): \Illuminate\Testing\TestResponse
+    private function expensePost(array $payload): TestResponse
     {
         return $this->withHeaders([
-            'Authorization' => 'Bearer ' . config('skycenter.automation_api_token'),
+            'Authorization' => 'Bearer '.config('skycenter.automation_api_token'),
         ])->postJson('/api/automation/telegram/expense', $payload);
     }
 
@@ -22,27 +23,27 @@ class ExpenseTelegramWizardTest extends TestCase
     {
         return [
             'update_type' => 'message',
-            'chat_id'     => $chatId,
-            'user_id'     => $userId,
-            'username'    => 'TestUser',
-            'message_id'  => rand(1, 9999),
-            'text'        => $text,
+            'chat_id' => $chatId,
+            'user_id' => $userId,
+            'username' => 'TestUser',
+            'message_id' => rand(1, 9999),
+            'text' => $text,
             'callback_query_id' => null,
-            'callback_data'     => null,
+            'callback_data' => null,
         ];
     }
 
     private function cb(string $data, string $chatId = '-100222', string $userId = '2001'): array
     {
         return [
-            'update_type'       => 'callback_query',
-            'chat_id'           => $chatId,
-            'user_id'           => $userId,
-            'username'          => 'TestUser',
-            'message_id'        => 50,
-            'text'              => null,
+            'update_type' => 'callback_query',
+            'chat_id' => $chatId,
+            'user_id' => $userId,
+            'username' => 'TestUser',
+            'message_id' => 50,
+            'text' => null,
             'callback_query_id' => 'cbq456',
-            'callback_data'     => $data,
+            'callback_data' => $data,
         ];
     }
 
@@ -60,7 +61,7 @@ class ExpenseTelegramWizardTest extends TestCase
     {
         $this->expensePost($this->msg('start'));
         // Setup budget category
-        $cat = \App\Models\BudgetCategory::create([
+        $cat = BudgetCategory::create([
             'service' => 'general',
             'name' => 'Kaufland',
             'kind' => 'expense',
@@ -96,7 +97,7 @@ class ExpenseTelegramWizardTest extends TestCase
     public function test_amount_saves_expense_transaction(): void
     {
         $this->expensePost($this->msg('start'));
-        $cat = \App\Models\BudgetCategory::create([
+        $cat = BudgetCategory::create([
             'service' => 'general',
             'name' => 'Curățenie',
             'kind' => 'expense',
@@ -110,17 +111,17 @@ class ExpenseTelegramWizardTest extends TestCase
         $this->assertStringContainsString('salvat', strtolower($res->json('text')));
         $this->assertDatabaseMissing('telegram_sessions', ['chat_id' => '-100222']);
         $this->assertDatabaseHas('budget_transactions', [
-            'type'        => 'expense',
+            'type' => 'expense',
             'category_id' => $cat->id,
-            'amount'      => 300.00,
-            'currency'    => 'RON',
+            'amount' => 300.00,
+            'currency' => 'RON',
         ]);
     }
 
     public function test_invalid_amount_keeps_state(): void
     {
         $this->expensePost($this->msg('start'));
-        $cat = \App\Models\BudgetCategory::create([
+        $cat = BudgetCategory::create([
             'service' => 'general',
             'name' => 'Kaufland',
             'kind' => 'expense',
@@ -138,12 +139,12 @@ class ExpenseTelegramWizardTest extends TestCase
     public function test_expired_session_resets(): void
     {
         TelegramSession::create([
-            'chat_id'    => '-100222',
-            'user_id'    => '2001',
-            'username'   => 'TestUser',
+            'chat_id' => '-100222',
+            'user_id' => '2001',
+            'username' => 'TestUser',
             'group_type' => 'expense',
-            'state'      => 'waiting_expense_amount',
-            'data'       => ['category_id' => 1, 'category_name' => 'Kaufland'],
+            'state' => 'waiting_expense_amount',
+            'data' => ['category_id' => 1, 'category_name' => 'Kaufland'],
             'expires_at' => now()->subMinutes(5),
         ]);
         $res = $this->expensePost($this->msg('300'));
@@ -161,7 +162,7 @@ class ExpenseTelegramWizardTest extends TestCase
     public function test_comma_decimal_amount_accepted(): void
     {
         $this->expensePost($this->msg('start'));
-        $cat = \App\Models\BudgetCategory::create([
+        $cat = BudgetCategory::create([
             'service' => 'general',
             'name' => 'Kaufland',
             'kind' => 'expense',
@@ -187,7 +188,7 @@ class ExpenseTelegramWizardTest extends TestCase
 
     public function test_category_selection_returns_edit_action(): void
     {
-        $cat = \App\Models\BudgetCategory::create([
+        $cat = BudgetCategory::create([
             'service' => 'general', 'name' => 'Test Cat', 'kind' => 'expense',
             'frequency' => 'once', 'emoji' => '🧪', 'is_active' => true,
         ]);
@@ -201,7 +202,7 @@ class ExpenseTelegramWizardTest extends TestCase
 
     public function test_amount_input_after_callback_returns_edit_action(): void
     {
-        $cat = \App\Models\BudgetCategory::create([
+        $cat = BudgetCategory::create([
             'service' => 'general', 'name' => 'Test Cat', 'kind' => 'expense',
             'frequency' => 'once', 'emoji' => '🧪', 'is_active' => true,
         ]);

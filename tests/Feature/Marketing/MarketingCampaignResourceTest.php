@@ -12,12 +12,13 @@ class MarketingCampaignResourceTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private User $operator;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->admin    = User::factory()->create(['role' => 'admin', 'is_active' => true]);
+        $this->admin = User::factory()->create(['role' => 'admin', 'is_active' => true]);
         $this->operator = User::factory()->create(['role' => 'operator', 'is_active' => true]);
     }
 

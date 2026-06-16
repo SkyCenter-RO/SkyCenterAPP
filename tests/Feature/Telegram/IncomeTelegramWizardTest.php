@@ -2,19 +2,20 @@
 
 namespace Tests\Feature\Telegram;
 
-use App\Models\BudgetTransaction;
+use App\Models\LodgingProperty;
 use App\Models\TelegramSession;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
 class IncomeTelegramWizardTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function incomePost(array $payload): \Illuminate\Testing\TestResponse
+    private function incomePost(array $payload): TestResponse
     {
         return $this->withHeaders([
-            'Authorization' => 'Bearer ' . config('skycenter.automation_api_token'),
+            'Authorization' => 'Bearer '.config('skycenter.automation_api_token'),
         ])->postJson('/api/automation/telegram/income', $payload);
     }
 
@@ -22,27 +23,27 @@ class IncomeTelegramWizardTest extends TestCase
     {
         return [
             'update_type' => 'message',
-            'chat_id'     => $chatId,
-            'user_id'     => $userId,
-            'username'    => 'TestUser',
-            'message_id'  => rand(1, 9999),
-            'text'        => $text,
+            'chat_id' => $chatId,
+            'user_id' => $userId,
+            'username' => 'TestUser',
+            'message_id' => rand(1, 9999),
+            'text' => $text,
             'callback_query_id' => null,
-            'callback_data'     => null,
+            'callback_data' => null,
         ];
     }
 
     private function cb(string $data, string $chatId = '-100111', string $userId = '1001'): array
     {
         return [
-            'update_type'       => 'callback_query',
-            'chat_id'           => $chatId,
-            'user_id'           => $userId,
-            'username'          => 'TestUser',
-            'message_id'        => 50,
-            'text'              => null,
+            'update_type' => 'callback_query',
+            'chat_id' => $chatId,
+            'user_id' => $userId,
+            'username' => 'TestUser',
+            'message_id' => 50,
+            'text' => null,
             'callback_query_id' => 'cbq123',
-            'callback_data'     => $data,
+            'callback_data' => $data,
         ];
     }
 
@@ -111,9 +112,9 @@ class IncomeTelegramWizardTest extends TestCase
         $this->assertStringContainsString('salvat', strtolower($res->json('text')));
         $this->assertDatabaseMissing('telegram_sessions', ['chat_id' => '-100111']);
         $this->assertDatabaseHas('budget_transactions', [
-            'type'    => 'income',
+            'type' => 'income',
             'service' => 'parcare',
-            'amount'  => 250.00,
+            'amount' => 250.00,
             'currency' => 'RON',
         ]);
     }
@@ -121,7 +122,7 @@ class IncomeTelegramWizardTest extends TestCase
     public function test_hotel_flow_property_then_rooms(): void
     {
         // Setup property & rooms
-        $property = \App\Models\LodgingProperty::create(['name' => 'SkyCenter', 'is_active' => true]);
+        $property = LodgingProperty::create(['name' => 'SkyCenter', 'is_active' => true]);
         $property->rooms()->createMany([
             ['name' => 'Camera 3', 'is_active' => true],
             ['name' => 'Camera 5', 'is_active' => true],
@@ -138,7 +139,7 @@ class IncomeTelegramWizardTest extends TestCase
     public function test_hotel_room_toggle_and_confirm(): void
     {
         // Setup property & rooms
-        $property = \App\Models\LodgingProperty::create(['name' => 'SkyCenter', 'is_active' => true]);
+        $property = LodgingProperty::create(['name' => 'SkyCenter', 'is_active' => true]);
         $property->rooms()->createMany([
             ['name' => 'Camera 3', 'is_active' => true],
             ['name' => 'Camera 5', 'is_active' => true],
@@ -160,7 +161,7 @@ class IncomeTelegramWizardTest extends TestCase
     public function test_hotel_confirm_without_room_returns_warning(): void
     {
         // Setup property & rooms
-        $property = \App\Models\LodgingProperty::create(['name' => 'SkyCenter', 'is_active' => true]);
+        $property = LodgingProperty::create(['name' => 'SkyCenter', 'is_active' => true]);
         $property->rooms()->createMany([
             ['name' => 'Camera 3', 'is_active' => true],
         ]);
@@ -187,12 +188,12 @@ class IncomeTelegramWizardTest extends TestCase
     public function test_expired_session_resets_wizard(): void
     {
         $session = TelegramSession::create([
-            'chat_id'    => '-100111',
-            'user_id'    => '1001',
-            'username'   => 'TestUser',
+            'chat_id' => '-100111',
+            'user_id' => '1001',
+            'username' => 'TestUser',
             'group_type' => 'income',
-            'state'      => 'waiting_amount',
-            'data'       => ['service' => 'parking', 'plate' => 'BX1234'],
+            'state' => 'waiting_amount',
+            'data' => ['service' => 'parking', 'plate' => 'BX1234'],
             'expires_at' => now()->subMinutes(5),
         ]);
 
@@ -230,7 +231,7 @@ class IncomeTelegramWizardTest extends TestCase
         $res->assertOk();
         $this->assertDatabaseHas('budget_transactions', [
             'currency' => 'EUR',
-            'amount'   => 125.00,
+            'amount' => 125.00,
         ]);
     }
 

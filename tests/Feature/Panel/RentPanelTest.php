@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\Panel;
 
+use App\Filament\Resources\RentContracts\Pages\CreateRentContract;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
@@ -39,7 +41,7 @@ class RentPanelTest extends TestCase
         $admin = $this->admin();
         $this->actingAs($admin);
 
-        \Livewire\Livewire::test(\App\Filament\Resources\RentContracts\Pages\CreateRentContract::class)
+        Livewire::test(CreateRentContract::class)
             ->assertFormFieldExists('rent_vehicle_id')
             ->assertFormFieldExists('rent_client_id');
     }

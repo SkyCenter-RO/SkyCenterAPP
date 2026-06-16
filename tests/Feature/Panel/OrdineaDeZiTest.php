@@ -34,7 +34,7 @@ class OrdineaDeZiTest extends TestCase
             'check_in_at' => '2026-06-10 09:00:00', 'check_out_at' => '2026-06-12 09:00:00',
         ]);
 
-        $page = new OrdineaDeZi();
+        $page = new OrdineaDeZi;
         $page->selectedDate = '2026-06-10';
         $snapshot = $page->getParkingAvailability();
 
@@ -51,7 +51,7 @@ class OrdineaDeZiTest extends TestCase
             'check_in' => '2026-06-10', 'check_out' => '2026-06-12',
         ]);
 
-        $page = new OrdineaDeZi();
+        $page = new OrdineaDeZi;
         $page->selectedDate = '2026-06-10';
         $events = $page->getLodgingEvents();
 

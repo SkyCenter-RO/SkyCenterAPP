@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Schema;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -22,7 +23,7 @@ class PaymentSchemaTest extends TestCase
 
     public function test_payment_service_check_rejects_invalid_value(): void
     {
-        $this->expectException(\Illuminate\Database\QueryException::class);
+        $this->expectException(QueryException::class);
         DB::table('payments')->insert([
             'service' => 'gym', 'amount' => 10, 'method' => 'cash',
         ]);

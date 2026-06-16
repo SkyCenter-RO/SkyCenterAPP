@@ -3,7 +3,6 @@
 namespace Tests\Feature\Scheduling;
 
 use App\Actions\Scheduling\ParseSchedulePdfAction;
-use App\Models\User;
 use App\Models\WorkShift;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -21,8 +20,8 @@ class ParseSchedulePdfActionTest extends TestCase
     public function test_parses_valid_pdf_schedule_correctly(): void
     {
         $filePath = base_path('MyFiles/Program_Iunie_2026_SkyCenter.pdf');
-        
-        $action = new ParseSchedulePdfAction();
+
+        $action = new ParseSchedulePdfAction;
         $result = $action->execute($filePath);
 
         $this->assertEquals('Iunie', $result['month_name']);

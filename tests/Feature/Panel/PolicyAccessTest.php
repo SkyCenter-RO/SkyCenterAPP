@@ -15,7 +15,6 @@ use App\Models\RentVehicle;
 use App\Models\Room;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Gate;
 use Tests\TestCase;
 
 class PolicyAccessTest extends TestCase

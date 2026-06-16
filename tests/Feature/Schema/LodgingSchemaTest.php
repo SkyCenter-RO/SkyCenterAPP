@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Schema;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -24,13 +25,13 @@ class LodgingSchemaTest extends TestCase
 
     public function test_reservation_status_check_rejects_invalid_value(): void
     {
-        $this->expectException(\Illuminate\Database\QueryException::class);
+        $this->expectException(QueryException::class);
         DB::table('lodging_reservations')->insert(['status' => 'teleported']);
     }
 
     public function test_sync_link_channel_check_rejects_invalid_value(): void
     {
-        $this->expectException(\Illuminate\Database\QueryException::class);
+        $this->expectException(QueryException::class);
         DB::table('lodging_sync_links')->insert(['channel' => 'expedia', 'ical_url' => 'http://x']);
     }
 }

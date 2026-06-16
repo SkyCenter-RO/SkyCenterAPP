@@ -2,6 +2,9 @@
 
 namespace Tests\Feature\Schema;
 
+use Database\Seeders\LodgingReferenceSeeder;
+use Database\Seeders\MessageTemplateSeeder;
+use Database\Seeders\ParkingReferenceSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
@@ -12,7 +15,7 @@ class SeederTest extends TestCase
 
     public function test_seeds_parking_lots_and_zones(): void
     {
-        $this->seed(\Database\Seeders\ParkingReferenceSeeder::class);
+        $this->seed(ParkingReferenceSeeder::class);
 
         $this->assertDatabaseHas('parking_lots', ['name' => 'Parcarea 1', 'total_spaces' => 54]);
         $this->assertDatabaseHas('parking_lots', ['name' => 'Parcarea 2', 'total_spaces' => 30]);
@@ -23,7 +26,7 @@ class SeederTest extends TestCase
 
     public function test_seeds_two_properties_with_rooms(): void
     {
-        $this->seed(\Database\Seeders\LodgingReferenceSeeder::class);
+        $this->seed(LodgingReferenceSeeder::class);
 
         $this->assertDatabaseHas('lodging_properties', ['name' => 'Sky Center']);
         $this->assertDatabaseHas('lodging_properties', ['name' => 'Serafim']);
@@ -32,7 +35,7 @@ class SeederTest extends TestCase
 
     public function test_seeds_four_message_templates(): void
     {
-        $this->seed(\Database\Seeders\MessageTemplateSeeder::class);
+        $this->seed(MessageTemplateSeeder::class);
 
         $this->assertSame(4, DB::table('message_templates')->count());
 

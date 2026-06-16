@@ -43,61 +43,51 @@ class DoubleBookingValidationTest extends TestCase
         // 1. Inside overlap: June 11 to June 14 -> Fail
         $this->actingAs($admin);
         Livewire::test(CreateLodgingReservation::class)
-            ->fillForm([
-                'room_id' => $room->id,
-                'check_in' => '2026-06-11',
-                'check_out' => '2026-06-14',
-                'guest_name' => 'Second Guest',
-                'currency' => 'RON',
-            ])
+            ->set('data.room_id', $room->id)
+            ->set('data.check_in', '2026-06-11')
+            ->set('data.check_out', '2026-06-14')
+            ->set('data.guest_name', 'Second Guest')
+            ->set('data.currency', 'RON')
             ->call('create')
             ->assertHasErrors(['data.check_out']);
 
         // 2. Start overlap: June 08 to June 12 -> Fail
         Livewire::test(CreateLodgingReservation::class)
-            ->fillForm([
-                'room_id' => $room->id,
-                'check_in' => '2026-06-08',
-                'check_out' => '2026-06-12',
-                'guest_name' => 'Second Guest',
-                'currency' => 'RON',
-            ])
+            ->set('data.room_id', $room->id)
+            ->set('data.check_in', '2026-06-08')
+            ->set('data.check_out', '2026-06-12')
+            ->set('data.guest_name', 'Second Guest')
+            ->set('data.currency', 'RON')
             ->call('create')
             ->assertHasErrors(['data.check_out']);
 
         // 3. End overlap: June 14 to June 18 -> Fail
         Livewire::test(CreateLodgingReservation::class)
-            ->fillForm([
-                'room_id' => $room->id,
-                'check_in' => '2026-06-14',
-                'check_out' => '2026-06-18',
-                'guest_name' => 'Second Guest',
-                'currency' => 'RON',
-            ])
+            ->set('data.room_id', $room->id)
+            ->set('data.check_in', '2026-06-14')
+            ->set('data.check_out', '2026-06-18')
+            ->set('data.guest_name', 'Second Guest')
+            ->set('data.currency', 'RON')
             ->call('create')
             ->assertHasErrors(['data.check_out']);
 
         // 4. Adjacent after: June 15 to June 20 -> Success (no overlap)
         Livewire::test(CreateLodgingReservation::class)
-            ->fillForm([
-                'room_id' => $room->id,
-                'check_in' => '2026-06-15',
-                'check_out' => '2026-06-20',
-                'guest_name' => 'Second Guest',
-                'currency' => 'RON',
-            ])
+            ->set('data.room_id', $room->id)
+            ->set('data.check_in', '2026-06-15')
+            ->set('data.check_out', '2026-06-20')
+            ->set('data.guest_name', 'Second Guest')
+            ->set('data.currency', 'RON')
             ->call('create')
             ->assertHasNoErrors();
 
         // 5. Adjacent before: June 05 to June 10 -> Success (no overlap)
         Livewire::test(CreateLodgingReservation::class)
-            ->fillForm([
-                'room_id' => $room->id,
-                'check_in' => '2026-06-05',
-                'check_out' => '2026-06-10',
-                'guest_name' => 'Third Guest',
-                'currency' => 'RON',
-            ])
+            ->set('data.room_id', $room->id)
+            ->set('data.check_in', '2026-06-05')
+            ->set('data.check_out', '2026-06-10')
+            ->set('data.guest_name', 'Third Guest')
+            ->set('data.currency', 'RON')
             ->call('create')
             ->assertHasNoErrors();
     }
@@ -129,71 +119,61 @@ class DoubleBookingValidationTest extends TestCase
 
         // 1. Inside overlap: June 11 to June 14 -> Fail
         Livewire::test(CreateRentContract::class)
-            ->fillForm([
-                'rent_vehicle_id' => $vehicle->id,
-                'rent_client_id' => $client->id,
-                'usage_type' => 'rent',
-                'start_date' => '2026-06-11',
-                'end_date' => '2026-06-14',
-                'status' => 'active',
-                'currency' => 'RON',
-            ])
+            ->set('data.rent_vehicle_id', $vehicle->id)
+            ->set('data.rent_client_id', $client->id)
+            ->set('data.usage_type', 'rent')
+            ->set('data.start_date', '2026-06-11')
+            ->set('data.end_date', '2026-06-14')
+            ->set('data.status', 'active')
+            ->set('data.currency', 'RON')
             ->call('create')
             ->assertHasErrors(['data.end_date']);
 
         // 2. Start overlap: June 08 to June 12 -> Fail
         Livewire::test(CreateRentContract::class)
-            ->fillForm([
-                'rent_vehicle_id' => $vehicle->id,
-                'rent_client_id' => $client->id,
-                'usage_type' => 'rent',
-                'start_date' => '2026-06-08',
-                'end_date' => '2026-06-12',
-                'status' => 'active',
-                'currency' => 'RON',
-            ])
+            ->set('data.rent_vehicle_id', $vehicle->id)
+            ->set('data.rent_client_id', $client->id)
+            ->set('data.usage_type', 'rent')
+            ->set('data.start_date', '2026-06-08')
+            ->set('data.end_date', '2026-06-12')
+            ->set('data.status', 'active')
+            ->set('data.currency', 'RON')
             ->call('create')
             ->assertHasErrors(['data.end_date']);
 
         // 3. End overlap: June 14 to June 18 -> Fail
         Livewire::test(CreateRentContract::class)
-            ->fillForm([
-                'rent_vehicle_id' => $vehicle->id,
-                'rent_client_id' => $client->id,
-                'usage_type' => 'rent',
-                'start_date' => '2026-06-14',
-                'end_date' => '2026-06-18',
-                'status' => 'active',
-                'currency' => 'RON',
-            ])
+            ->set('data.rent_vehicle_id', $vehicle->id)
+            ->set('data.rent_client_id', $client->id)
+            ->set('data.usage_type', 'rent')
+            ->set('data.start_date', '2026-06-14')
+            ->set('data.end_date', '2026-06-18')
+            ->set('data.status', 'active')
+            ->set('data.currency', 'RON')
             ->call('create')
             ->assertHasErrors(['data.end_date']);
 
         // 4. Adjacent after: June 15 to June 20 -> Success
         Livewire::test(CreateRentContract::class)
-            ->fillForm([
-                'rent_vehicle_id' => $vehicle->id,
-                'rent_client_id' => $client->id,
-                'usage_type' => 'rent',
-                'start_date' => '2026-06-15',
-                'end_date' => '2026-06-20',
-                'status' => 'active',
-                'currency' => 'RON',
-            ])
+            ->set('data.rent_vehicle_id', $vehicle->id)
+            ->set('data.rent_client_id', $client->id)
+            ->set('data.usage_type', 'rent')
+            ->set('data.start_date', '2026-06-15')
+            ->set('data.end_date', '2026-06-20')
+            ->set('data.status', 'active')
+            ->set('data.currency', 'RON')
             ->call('create')
             ->assertHasNoErrors();
 
         // 5. Adjacent before: June 05 to June 10 -> Success
         Livewire::test(CreateRentContract::class)
-            ->fillForm([
-                'rent_vehicle_id' => $vehicle->id,
-                'rent_client_id' => $client->id,
-                'usage_type' => 'rent',
-                'start_date' => '2026-06-05',
-                'end_date' => '2026-06-10',
-                'status' => 'active',
-                'currency' => 'RON',
-            ])
+            ->set('data.rent_vehicle_id', $vehicle->id)
+            ->set('data.rent_client_id', $client->id)
+            ->set('data.usage_type', 'rent')
+            ->set('data.start_date', '2026-06-05')
+            ->set('data.end_date', '2026-06-10')
+            ->set('data.status', 'active')
+            ->set('data.currency', 'RON')
             ->call('create')
             ->assertHasNoErrors();
     }
