@@ -1,6 +1,6 @@
 # SkyCenter Reproducible Baseline
 
-Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPark\App\.worktrees\full-application-audit` on branch `audit/full-application`. Commands executed in the application image used an ephemeral test key; no key value is recorded here. Durations are wall-clock measurements and timestamps use Europe/Bucharest (`+03:00`).
+Evidence was collected on 2026-06-14 and supplemented on 2026-06-16 in the linked worktree `D:\Automation\SkyPark\App\.worktrees\full-application-audit` on branch `audit/full-application`. Commands executed in the application image used an ephemeral test key; no key value is recorded here. Durations are wall-clock measurements and timestamps use Europe/Bucharest (`+03:00`).
 
 ## Repository
 
@@ -68,39 +68,59 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 
 ### Application container state
 
-- Command: `docker inspect app-app-1 --format <status/health/network summary>`
-- Timestamp: `2026-06-14T10:35:17.442+03:00`
+- Command: `docker inspect app-app-1 --format 'status={{.State.Status}} health={{if .State.Health}}{{.State.Health.Status}}{{else}}not-configured{{end}} network={{range $k,$v := .NetworkSettings.Networks}}{{$k}}{{end}}'`
+- Timestamp: `2026-06-16T08:45:06.421+03:00`
 - Environment: existing Docker project `app`
 - Exit code: `0`
-- Duration: `0.088s`
+- Duration: `0.055s`
 - Finding IDs: none
 - Result: `status=running`, no container health check configured, network `app_default`.
 
 ### Database container state
 
-- Command: `docker inspect app-pgsql-1 --format <status/health/network summary>`
-- Timestamp: `2026-06-14T10:35:17.533+03:00`
+- Command: `docker inspect app-pgsql-1 --format 'status={{.State.Status}} health={{if .State.Health}}{{.State.Health.Status}}{{else}}not-configured{{end}} network={{range $k,$v := .NetworkSettings.Networks}}{{$k}}{{end}}'`
+- Timestamp: `2026-06-16T08:45:06.490+03:00`
 - Environment: existing Docker project `app`
 - Exit code: `0`
-- Duration: `0.070s`
+- Duration: `0.050s`
 - Finding IDs: `SC-AUD-002`
 - Result: `status=running`, `health=healthy`, network `app_default`.
 
 ### Isolated Compose port configuration
 
-- Command: `docker compose config` (database published-port excerpt)
-- Timestamp: `2026-06-14T10:35:17.605+03:00`
+- Command: `docker compose config | Select-String -Pattern 'published:|target:|app:|pgsql:' -Context 0,1`
+- Timestamp: `2026-06-16T08:45:22.456+03:00`
 - Environment: audit worktree Compose configuration; project was not started
 - Exit code: `0`
-- Duration: `0.209s`
+- Duration: `0.156s`
 - Finding IDs: `SC-AUD-002`
-- Result: the worktree configuration publishes database target `5432` on host port `55433`. The existing healthy `app-pgsql-1` container already owns `0.0.0.0:55433`, so a second isolated Compose project cannot bind that port concurrently. See `SC-AUD-002`.
+- Result: the worktree configuration publishes application target `8000` on host port `8080` and database target `5432` on host port `55433`; the existing active stack already publishes both host ports.
+
+### Isolated Compose startup attempt
+
+- Command: `docker compose up -d`
+- Timestamp: `2026-06-16T08:44:50.598+03:00`
+- Environment: audit worktree default Docker Compose project while existing `app` stack remained running
+- Exit code: `1`
+- Duration: `14.296s`
+- Finding IDs: `SC-AUD-002`
+- Result: Compose built image `full-application-audit-app`, created worktree containers, started `full-application-audit-pgsql-1`, waited until it was healthy, then failed starting `full-application-audit-app-1` with `Bind for 0.0.0.0:8080 failed: port is already allocated`. The observed startup failure is the fixed application host port `8080`; PostgreSQL did not surface as the first bind failure in this run.
+
+### Isolated Compose cleanup
+
+- Command: `docker compose down --remove-orphans`
+- Timestamp: `2026-06-16T08:45:04.905+03:00`
+- Environment: audit worktree default Docker Compose project cleanup; no volume removal
+- Exit code: `0`
+- Duration: `0.872s`
+- Finding IDs: none
+- Result: removed `full-application-audit-app-1`, removed `full-application-audit-pgsql-1`, and removed network `full-application-audit_default`; the existing `app` stack was not stopped.
 
 ## Runtime Versions
 
 ### PHP
 
-- Command: `docker run --rm --network app_default -e APP_KEY=<ephemeral-test-key> -v <audit-worktree>:/var/www/html -w /var/www/html app-app php --version`
+- Command: `docker run --rm --network app_default -e APP_KEY=<ephemeral-test-key> -v "D:\Automation\SkyPark\App\.worktrees\full-application-audit:/var/www/html" -w /var/www/html app-app php --version`
 - Timestamp: `2026-06-14T10:35:17.815+03:00`
 - Environment: one-off `app-app` image with the audit worktree mounted
 - Exit code: `0`
@@ -110,7 +130,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 
 ### Composer
 
-- Command: `docker run --rm --network app_default -e APP_KEY=<ephemeral-test-key> -v <audit-worktree>:/var/www/html -w /var/www/html app-app composer --version`
+- Command: `docker run --rm --network app_default -e APP_KEY=<ephemeral-test-key> -v "D:\Automation\SkyPark\App\.worktrees\full-application-audit:/var/www/html" -w /var/www/html app-app composer --version`
 - Timestamp: `2026-06-14T10:35:18.906+03:00`
 - Environment: one-off `app-app` image with the audit worktree mounted
 - Exit code: `0`
@@ -128,6 +148,26 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 - Finding IDs: none
 - Result: PostgreSQL client `16.14`.
 
+### Node.js
+
+- Command: `node --version`
+- Timestamp: `2026-06-16T08:45:05.794+03:00`
+- Environment: host Node.js in the audit worktree
+- Exit code: `0`
+- Duration: `0.032s`
+- Finding IDs: `SC-AUD-001`
+- Result: Node.js `v26.1.0`.
+
+### npm
+
+- Command: `npm --version`
+- Timestamp: `2026-06-16T08:45:05.829+03:00`
+- Environment: host npm in the audit worktree
+- Exit code: `0`
+- Duration: `0.596s`
+- Finding IDs: `SC-AUD-001`
+- Result: npm `11.14.1`.
+
 ## Dependencies
 
 ### npm lockfile tracking
@@ -142,7 +182,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 
 ### Composer manifest validation
 
-- Command: `docker run --rm --network app_default -e APP_KEY=<ephemeral-test-key> -v <audit-worktree>:/var/www/html -w /var/www/html app-app composer validate --strict`
+- Command: `docker run --rm --network app_default -e APP_KEY=<ephemeral-test-key> -v "D:\Automation\SkyPark\App\.worktrees\full-application-audit:/var/www/html" -w /var/www/html app-app composer validate --strict`
 - Timestamp: `2026-06-14T10:35:21.498+03:00`
 - Environment: one-off `app-app` image with the audit worktree mounted
 - Exit code: `0`
@@ -150,9 +190,19 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 - Finding IDs: none
 - Result: `composer.json` is valid under strict validation.
 
+### Composer dependency preparation
+
+- Command: `docker run --rm --network app_default -e APP_KEY=<ephemeral-test-key> -v "D:\Automation\SkyPark\App\.worktrees\full-application-audit:/var/www/html" -w /var/www/html app-app composer install --no-interaction --prefer-dist`
+- Timestamp: `2026-06-16T08:43:57.516+03:00`
+- Environment: one-off `app-app` image on `app_default` with the audit worktree mounted; establishes backend dependency preparation for the mounted worktree
+- Exit code: `0`
+- Duration: `52.966s`
+- Finding IDs: none
+- Result: Composer installed from the lock file, verified the lock file contents can be installed on the current platform, reported `Nothing to install, update or remove`, generated optimized autoload files, ran Laravel package discovery, ran `filament:upgrade`, published Filament assets, and cleared configuration, route, and compiled view caches. Backend dependency preparation was reproducible for the mounted worktree, so no backend reproducibility finding was added.
+
 ### Direct Composer dependencies
 
-- Command: `docker run --rm --network app_default -e APP_KEY=<ephemeral-test-key> -v <audit-worktree>:/var/www/html -w /var/www/html app-app composer show --direct`
+- Command: `docker run --rm --network app_default -e APP_KEY=<ephemeral-test-key> -v "D:\Automation\SkyPark\App\.worktrees\full-application-audit:/var/www/html" -w /var/www/html app-app composer show --direct`
 - Timestamp: `2026-06-14T10:35:23.617+03:00`
 - Environment: one-off `app-app` image with the audit worktree mounted
 - Exit code: `0`
@@ -162,7 +212,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 
 ### Laravel application summary
 
-- Command: `docker run --rm --network app_default -e APP_KEY=<ephemeral-test-key> -v <audit-worktree>:/var/www/html -w /var/www/html app-app php artisan about`
+- Command: `docker run --rm --network app_default -e APP_KEY=<ephemeral-test-key> -v "D:\Automation\SkyPark\App\.worktrees\full-application-audit:/var/www/html" -w /var/www/html app-app php artisan about`
 - Timestamp: `2026-06-14T10:35:25.325+03:00`
 - Environment: one-off `app-app` image with the audit worktree mounted; ephemeral test key supplied
 - Exit code: `0`
@@ -174,7 +224,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 
 ### Application routes
 
-- Command: `docker run --rm --network app_default -e APP_KEY=<ephemeral-test-key> -v <audit-worktree>:/var/www/html -w /var/www/html app-app php artisan route:list --except-vendor`
+- Command: `docker run --rm --network app_default -e APP_KEY=<ephemeral-test-key> -v "D:\Automation\SkyPark\App\.worktrees\full-application-audit:/var/www/html" -w /var/www/html app-app php artisan route:list --except-vendor`
 - Timestamp: `2026-06-14T10:35:48.903+03:00`
 - Environment: one-off `app-app` image with the audit worktree mounted and connected to `app_default`
 - Exit code: `0`
@@ -184,7 +234,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 
 ### Migration status
 
-- Command: `docker run --rm --network app_default -e APP_KEY=<ephemeral-test-key> -v <audit-worktree>:/var/www/html -w /var/www/html app-app php artisan migrate:status`
+- Command: `docker run --rm --network app_default -e APP_KEY=<ephemeral-test-key> -v "D:\Automation\SkyPark\App\.worktrees\full-application-audit:/var/www/html" -w /var/www/html app-app php artisan migrate:status`
 - Timestamp: `2026-06-14T10:36:00.093+03:00`
 - Environment: one-off `app-app` image with the audit worktree mounted; database host `pgsql` on `app_default`
 - Exit code: `0`
@@ -194,7 +244,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 
 ## Automated Tests
 
-- Command: `docker run --rm --network app_default -e APP_KEY=<ephemeral-test-key> -v <audit-worktree>:/var/www/html -w /var/www/html app-app php artisan test --compact`
+- Command: `docker run --rm --network app_default -e APP_KEY=<ephemeral-test-key> -v "D:\Automation\SkyPark\App\.worktrees\full-application-audit:/var/www/html" -w /var/www/html app-app php artisan test --compact`
 - Timestamp: `2026-06-14T10:36:23.010+03:00`
 - Environment: one-off `app-app` image with the audit worktree mounted; `phpunit.xml` test database `skycenter_app_test` on `pgsql`
 - Exit code: `0`
@@ -204,7 +254,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 
 ## Formatting
 
-- Command: `docker run --rm --network app_default -e APP_KEY=<ephemeral-test-key> -v <audit-worktree>:/var/www/html -w /var/www/html app-app vendor/bin/pint --test`
+- Command: `docker run --rm --network app_default -e APP_KEY=<ephemeral-test-key> -v "D:\Automation\SkyPark\App\.worktrees\full-application-audit:/var/www/html" -w /var/www/html app-app vendor/bin/pint --test`
 - Timestamp: `2026-06-14T10:39:12.330+03:00`
 - Environment: one-off `app-app` image with the audit worktree mounted
 - Exit code: `1`
@@ -237,7 +287,7 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 ## Reproducibility Blockers
 
 - `SC-AUD-001`: the repository does not contain a committed npm lockfile, so the required clean-install command fails and the successful build depends on previously prepared local dependencies.
-- `SC-AUD-002`: the Compose configuration fixes PostgreSQL host port `55433`, which is already occupied by the existing application stack. Worktree code therefore required a one-off mounted `app-app` container rather than an independently started Compose project.
+- `SC-AUD-002`: the Compose configuration uses fixed published host ports. With the existing stack running, `docker compose up -d` from the worktree failed on application host port `8080`; the configuration also publishes PostgreSQL on host port `55433`, so concurrent worktrees require `APP_PORT` and `FORWARD_DB_PORT` coordination or parameterization.
 - The ephemeral application key was supplied only to one-off test containers and is intentionally omitted from this document.
 
 ## Baseline Findings
@@ -245,5 +295,5 @@ Evidence was collected on 2026-06-14 in the linked worktree `D:\Automation\SkyPa
 | ID | Severity | Class | Summary | Baseline evidence |
 |---|---|---|---|---|
 | `SC-AUD-001` | Medium | operational-gap | Clean npm installation is not reproducible because no lockfile is committed. | `npm ci` exited `1`; `npm run build` succeeded only with pre-existing `node_modules`. |
-| `SC-AUD-002` | Low | operational-gap | A second isolated Compose project cannot bind the configured PostgreSQL host port while the existing stack is running. | Compose publishes `55433`; `app-pgsql-1` already owns that host port. |
+| `SC-AUD-002` | Low | operational-gap | A second isolated Compose project cannot start while fixed published host ports are already used by the existing stack. | `docker compose up -d` failed on `0.0.0.0:8080`; Compose config also publishes PostgreSQL on `55433`. |
 | `SC-AUD-003` | Low | maintainability | The repository does not pass its Pint formatting check. | Pint exited `1` with `78` style issues in `302` checked files. |
