@@ -30,8 +30,34 @@ class LodgingReservationForm
                     ->label('Email address')
                     ->email(),
                 TextInput::make('status'),
-                DatePicker::make('check_in'),
-                DatePicker::make('check_out'),
+                DatePicker::make('check_in')
+                    ->required(),
+                DatePicker::make('check_out')
+                    ->required()
+                    ->after('check_in')
+                    ->rules([
+                        fn (\Filament\Forms\Get $get, $record) => function (string $attribute, $value, \Closure $fail) use ($get, $record) {
+                            $checkIn = $get('check_in');
+                            $roomId = $get('room_id');
+                            if (! $checkIn || ! $roomId || ! $value) {
+                                return;
+                            }
+
+                            $overlap = \App\Models\LodgingReservation::query()
+                                ->where('room_id', $roomId)
+                                ->when($record, fn ($q) => $q->where('id', '!=', $record->id))
+                                ->where('status', '!=', 'cancelled')
+                                ->where(function ($query) use ($checkIn, $value) {
+                                    $query->where('check_in', '<', $value)
+                                          ->where('check_out', '>', $checkIn);
+                                })
+                                ->exists();
+
+                            if ($overlap) {
+                                $fail('Această cameră este deja rezervată pentru perioada selectată.');
+                            }
+                        }
+                    ]),
                 TextInput::make('nights')
                     ->numeric(),
                 TextInput::make('price')

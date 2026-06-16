@@ -24,8 +24,34 @@ class RentContractForm
                     ->numeric(),
                 TextInput::make('usage_type')
                     ->required(),
-                DatePicker::make('start_date'),
-                DatePicker::make('end_date'),
+                DatePicker::make('start_date')
+                    ->required(),
+                DatePicker::make('end_date')
+                    ->required()
+                    ->after('start_date')
+                    ->rules([
+                        fn (\Filament\Forms\Get $get, $record) => function (string $attribute, $value, \Closure $fail) use ($get, $record) {
+                            $startDate = $get('start_date');
+                            $vehicleId = $get('rent_vehicle_id');
+                            if (! $startDate || ! $vehicleId || ! $value) {
+                                return;
+                            }
+
+                            $overlap = \App\Models\RentContract::query()
+                                ->where('rent_vehicle_id', $vehicleId)
+                                ->when($record, fn ($q) => $q->where('id', '!=', $record->id))
+                                ->where('status', '!=', 'cancelled')
+                                ->where(function ($query) use ($startDate, $value) {
+                                    $query->where('start_date', '<', $value)
+                                          ->where('end_date', '>', $startDate);
+                                })
+                                ->exists();
+
+                            if ($overlap) {
+                                $fail('Acest vehicul este deja închiriat pentru perioada selectată.');
+                            }
+                        }
+                    ]),
                 TextInput::make('km_at_handover')
                     ->numeric(),
                 TextInput::make('km_at_return')
