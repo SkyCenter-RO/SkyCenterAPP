@@ -51,7 +51,7 @@ class DoubleBookingValidationTest extends TestCase
                 'currency' => 'RON',
             ])
             ->call('create')
-            ->assertHasErrors(['check_out']);
+            ->assertHasErrors(['data.check_out']);
 
         // 2. Start overlap: June 08 to June 12 -> Fail
         Livewire::test(CreateLodgingReservation::class)
@@ -63,7 +63,7 @@ class DoubleBookingValidationTest extends TestCase
                 'currency' => 'RON',
             ])
             ->call('create')
-            ->assertHasErrors(['check_out']);
+            ->assertHasErrors(['data.check_out']);
 
         // 3. End overlap: June 14 to June 18 -> Fail
         Livewire::test(CreateLodgingReservation::class)
@@ -75,7 +75,7 @@ class DoubleBookingValidationTest extends TestCase
                 'currency' => 'RON',
             ])
             ->call('create')
-            ->assertHasErrors(['check_out']);
+            ->assertHasErrors(['data.check_out']);
 
         // 4. Adjacent after: June 15 to June 20 -> Success (no overlap)
         Livewire::test(CreateLodgingReservation::class)
@@ -139,7 +139,7 @@ class DoubleBookingValidationTest extends TestCase
                 'currency' => 'RON',
             ])
             ->call('create')
-            ->assertHasErrors(['end_date']);
+            ->assertHasErrors(['data.end_date']);
 
         // 2. Start overlap: June 08 to June 12 -> Fail
         Livewire::test(CreateRentContract::class)
@@ -153,7 +153,7 @@ class DoubleBookingValidationTest extends TestCase
                 'currency' => 'RON',
             ])
             ->call('create')
-            ->assertHasErrors(['end_date']);
+            ->assertHasErrors(['data.end_date']);
 
         // 3. End overlap: June 14 to June 18 -> Fail
         Livewire::test(CreateRentContract::class)
@@ -167,7 +167,7 @@ class DoubleBookingValidationTest extends TestCase
                 'currency' => 'RON',
             ])
             ->call('create')
-            ->assertHasErrors(['end_date']);
+            ->assertHasErrors(['data.end_date']);
 
         // 4. Adjacent after: June 15 to June 20 -> Success
         Livewire::test(CreateRentContract::class)
