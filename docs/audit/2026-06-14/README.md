@@ -42,5 +42,5 @@ This directory contains the evidence and findings for the approved full-applicat
 | Interconnections | Complete | `interconnections.md` |
 | Test traceability | Complete | `test-traceability.md` |
 | Operations | Complete | `operations.md` |
-| Manual usability | Pending | `manual-usability.md` |
+| Manual usability | Complete | `manual-usability.md` |
 | Final synthesis | Pending | `final-report.md` |
