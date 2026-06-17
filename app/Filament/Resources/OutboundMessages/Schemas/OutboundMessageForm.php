@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\OutboundMessages\Schemas;
 
+use App\Enums\OutboundMessageStatus;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -25,9 +26,9 @@ class OutboundMessageForm
                     ->required(),
                 DateTimePicker::make('sent_at'),
                 Select::make('status')
-                    ->options(\App\Enums\OutboundMessageStatus::class)
+                    ->options(OutboundMessageStatus::class)
                     ->required()
-                    ->default(\App\Enums\OutboundMessageStatus::PENDING),
+                    ->default(OutboundMessageStatus::PENDING),
             ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\LodgingReservationStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -14,7 +15,7 @@ class LodgingReservation extends Model
     ];
 
     protected $casts = [
-        'status' => \App\Enums\LodgingReservationStatus::class,
+        'status' => LodgingReservationStatus::class,
         'check_in' => 'date',
         'check_out' => 'date',
         'review_request_sent' => 'boolean',

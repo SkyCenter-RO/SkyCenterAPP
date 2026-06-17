@@ -2,13 +2,13 @@
 
 namespace Tests\Feature\Panel;
 
-use App\Filament\Resources\ParkingReservations\Schemas\ParkingReservationForm;
+use App\Filament\Resources\AutomationWebhookLogs\Schemas\AutomationWebhookLogForm;
 use App\Filament\Resources\LodgingReservations\Schemas\LodgingReservationForm;
+use App\Filament\Resources\OutboundMessages\Schemas\OutboundMessageForm;
+use App\Filament\Resources\ParkingReservations\Schemas\ParkingReservationForm;
 use App\Filament\Resources\RentContracts\Schemas\RentContractForm;
 use App\Filament\Resources\RentVehicles\Schemas\RentVehicleForm;
 use App\Filament\Resources\Salaries\Schemas\SalaryForm;
-use App\Filament\Resources\OutboundMessages\Schemas\OutboundMessageForm;
-use App\Filament\Resources\AutomationWebhookLogs\Schemas\AutomationWebhookLogForm;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Schema;
 use Tests\TestCase;
@@ -17,13 +17,14 @@ class FilamentFormsStatusSelectTest extends TestCase
 {
     private function getField(string $formClass, string $fieldName)
     {
-        $schema = new Schema();
+        $schema = new Schema;
         $formClass::configure($schema);
         foreach ($schema->getComponents() as $component) {
             if ($component->getName() === $fieldName) {
                 return $component;
             }
         }
+
         return null;
     }
 

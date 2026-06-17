@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\RentContracts\Schemas;
 
+use App\Enums\RentContractStatus;
 use App\Models\RentContract;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
@@ -79,9 +80,9 @@ class RentContractForm
                     ->required()
                     ->default('RON'),
                 Select::make('status')
-                    ->options(\App\Enums\RentContractStatus::class)
+                    ->options(RentContractStatus::class)
                     ->required()
-                    ->default(\App\Enums\RentContractStatus::ACTIVE),
+                    ->default(RentContractStatus::ACTIVE),
                 Textarea::make('notes')
                     ->columnSpanFull(),
                 TextInput::make('metadata'),

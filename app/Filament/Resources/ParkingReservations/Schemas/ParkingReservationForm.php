@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ParkingReservations\Schemas;
 
+use App\Enums\ParkingReservationStatus;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -28,9 +29,9 @@ class ParkingReservationForm
                 Select::make('parking_space_id')
                     ->relationship('parkingSpace', 'id'),
                 Select::make('status')
-                    ->options(\App\Enums\ParkingReservationStatus::class)
+                    ->options(ParkingReservationStatus::class)
                     ->required()
-                    ->default(\App\Enums\ParkingReservationStatus::PENDING_APPROVAL),
+                    ->default(ParkingReservationStatus::PENDING_APPROVAL),
                 TextInput::make('plate'),
                 TextInput::make('normalized_plate'),
                 TextInput::make('vehicle_type'),

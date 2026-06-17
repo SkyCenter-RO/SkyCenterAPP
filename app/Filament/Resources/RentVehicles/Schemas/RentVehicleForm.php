@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\RentVehicles\Schemas;
 
+use App\Enums\RentVehicleStatus;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -46,9 +47,9 @@ class RentVehicleForm
                     ->required()
                     ->default('RON'),
                 Select::make('status')
-                    ->options(\App\Enums\RentVehicleStatus::class)
+                    ->options(RentVehicleStatus::class)
                     ->required()
-                    ->default(\App\Enums\RentVehicleStatus::AVAILABLE),
+                    ->default(RentVehicleStatus::AVAILABLE),
                 Textarea::make('notes')
                     ->columnSpanFull(),
                 TextInput::make('metadata'),

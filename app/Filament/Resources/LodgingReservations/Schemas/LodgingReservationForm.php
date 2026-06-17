@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\LodgingReservations\Schemas;
 
+use App\Enums\LodgingReservationStatus;
 use App\Models\LodgingReservation;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
@@ -31,7 +32,7 @@ class LodgingReservationForm
                     ->label('Email address')
                     ->email(),
                 Select::make('status')
-                    ->options(\App\Enums\LodgingReservationStatus::class)
+                    ->options(LodgingReservationStatus::class)
                     ->nullable(),
                 DatePicker::make('check_in')
                     ->required(),

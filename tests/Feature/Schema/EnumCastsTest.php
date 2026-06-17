@@ -2,20 +2,20 @@
 
 namespace Tests\Feature\Schema;
 
-use App\Models\ParkingReservation;
-use App\Models\LodgingReservation;
-use App\Models\RentContract;
-use App\Models\RentVehicle;
-use App\Models\Salary;
-use App\Models\OutboundMessage;
-use App\Models\AutomationWebhookLog;
-use App\Enums\ParkingReservationStatus;
+use App\Enums\AutomationWebhookLogStatus;
 use App\Enums\LodgingReservationStatus;
+use App\Enums\OutboundMessageStatus;
+use App\Enums\ParkingReservationStatus;
 use App\Enums\RentContractStatus;
 use App\Enums\RentVehicleStatus;
 use App\Enums\SalaryStatus;
-use App\Enums\OutboundMessageStatus;
-use App\Enums\AutomationWebhookLogStatus;
+use App\Models\AutomationWebhookLog;
+use App\Models\LodgingReservation;
+use App\Models\OutboundMessage;
+use App\Models\ParkingReservation;
+use App\Models\RentContract;
+use App\Models\RentVehicle;
+use App\Models\Salary;
 use Tests\TestCase;
 
 class EnumCastsTest extends TestCase

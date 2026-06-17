@@ -66,7 +66,7 @@ class ConfirmationMessageTest extends TestCase
 
         $message = OutboundMessage::query()->where('service', 'parking')->where('reference_id', $reservation->id)->first();
         $this->assertNotNull($message);
-        $this->assertSame('pending', $message->status);
+        $this->assertSame('pending', $message->status->value);
         $this->assertSame('confirmation', $message->template_key);
         $this->assertSame('whatsapp', $message->channel);
         $this->assertSame('Buna Ion Pop, auto B 123 ABC, 01.07.2026 10:00 - 05.07.2026 10:00.', $message->payload['text']);

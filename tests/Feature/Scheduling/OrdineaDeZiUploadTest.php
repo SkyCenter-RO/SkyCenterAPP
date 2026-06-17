@@ -6,6 +6,7 @@ use App\Filament\Pages\OrdineaDeZi;
 use App\Models\User;
 use App\Models\WorkShift;
 use Filament\Facades\Filament;
+use Filament\Schemas\Schema;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -55,7 +56,7 @@ class OrdineaDeZiUploadTest extends TestCase
 
     public function test_uploader_contains_max_size_constraint(): void
     {
-        $page = new \App\Filament\Pages\OrdineaDeZi();
+        $page = new OrdineaDeZi;
         $refMethod = new \ReflectionMethod($page, 'getHeaderActions');
         $refMethod->setAccessible(true);
         $actions = $refMethod->invoke($page);
@@ -69,7 +70,7 @@ class OrdineaDeZiUploadTest extends TestCase
         }
 
         $this->assertNotNull($uploadAction);
-        $formComponents = $uploadAction->getSchema(new \Filament\Schemas\Schema())->getComponents();
+        $formComponents = $uploadAction->getSchema(new Schema)->getComponents();
         $pdfField = null;
         foreach ($formComponents as $component) {
             if ($component->getName() === 'schedule_pdf') {
