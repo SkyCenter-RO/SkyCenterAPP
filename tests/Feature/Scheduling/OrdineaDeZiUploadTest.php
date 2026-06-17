@@ -52,4 +52,33 @@ class OrdineaDeZiUploadTest extends TestCase
             ->test(OrdineaDeZi::class)
             ->assertActionHidden('uploadSchedule');
     }
+
+    public function test_uploader_contains_max_size_constraint(): void
+    {
+        $page = new \App\Filament\Pages\OrdineaDeZi();
+        $refMethod = new \ReflectionMethod($page, 'getHeaderActions');
+        $refMethod->setAccessible(true);
+        $actions = $refMethod->invoke($page);
+
+        $uploadAction = null;
+        foreach ($actions as $action) {
+            if ($action->getName() === 'uploadSchedule') {
+                $uploadAction = $action;
+                break;
+            }
+        }
+
+        $this->assertNotNull($uploadAction);
+        $formComponents = $uploadAction->getSchema(new \Filament\Schemas\Schema())->getComponents();
+        $pdfField = null;
+        foreach ($formComponents as $component) {
+            if ($component->getName() === 'schedule_pdf') {
+                $pdfField = $component;
+                break;
+            }
+        }
+
+        $this->assertNotNull($pdfField);
+        $this->assertSame(5120, $pdfField->getMaxSize());
+    }
 }
