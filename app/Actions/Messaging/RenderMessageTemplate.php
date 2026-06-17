@@ -24,6 +24,7 @@ class RenderMessageTemplate
         }
 
         $text = strtr($template->body, $this->wrapPlaceholders($placeholders));
+        $text = preg_replace('/\{\{[^}]*\}\}/', '', $text);
 
         return ['channel' => $template->channel, 'text' => $text];
     }
