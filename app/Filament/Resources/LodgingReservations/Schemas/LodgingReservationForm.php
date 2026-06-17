@@ -30,7 +30,9 @@ class LodgingReservationForm
                 TextInput::make('email')
                     ->label('Email address')
                     ->email(),
-                TextInput::make('status'),
+                Select::make('status')
+                    ->options(\App\Enums\LodgingReservationStatus::class)
+                    ->nullable(),
                 DatePicker::make('check_in')
                     ->required(),
                 DatePicker::make('check_out')

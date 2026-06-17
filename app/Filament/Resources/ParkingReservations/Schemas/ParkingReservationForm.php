@@ -27,9 +27,10 @@ class ParkingReservationForm
                     ->relationship('zone', 'id'),
                 Select::make('parking_space_id')
                     ->relationship('parkingSpace', 'id'),
-                TextInput::make('status')
+                Select::make('status')
+                    ->options(\App\Enums\ParkingReservationStatus::class)
                     ->required()
-                    ->default('pending_approval'),
+                    ->default(\App\Enums\ParkingReservationStatus::PENDING_APPROVAL),
                 TextInput::make('plate'),
                 TextInput::make('normalized_plate'),
                 TextInput::make('vehicle_type'),

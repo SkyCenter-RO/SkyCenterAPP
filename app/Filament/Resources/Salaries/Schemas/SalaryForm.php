@@ -27,9 +27,10 @@ class SalaryForm
                 DatePicker::make('period_month')
                     ->required(),
                 DateTimePicker::make('paid_at'),
-                TextInput::make('status')
+                Select::make('status')
+                    ->options(\App\Enums\SalaryStatus::class)
                     ->required()
-                    ->default('pending'),
+                    ->default(\App\Enums\SalaryStatus::PENDING),
                 Textarea::make('notes')
                     ->columnSpanFull(),
             ]);

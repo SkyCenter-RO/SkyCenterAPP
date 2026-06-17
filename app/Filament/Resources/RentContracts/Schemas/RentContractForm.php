@@ -78,9 +78,10 @@ class RentContractForm
                 TextInput::make('currency')
                     ->required()
                     ->default('RON'),
-                TextInput::make('status')
+                Select::make('status')
+                    ->options(\App\Enums\RentContractStatus::class)
                     ->required()
-                    ->default('active'),
+                    ->default(\App\Enums\RentContractStatus::ACTIVE),
                 Textarea::make('notes')
                     ->columnSpanFull(),
                 TextInput::make('metadata'),
