@@ -17,6 +17,7 @@ class ParkingReservation extends Model
     ];
 
     protected $casts = [
+        'status' => \App\Enums\ParkingReservationStatus::class,
         'check_in_at' => 'datetime',
         'check_out_at' => 'datetime',
         'source_created_at' => 'datetime',

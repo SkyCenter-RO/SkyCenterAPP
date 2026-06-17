@@ -12,6 +12,7 @@ class OutboundMessage extends Model
     ];
 
     protected $casts = [
+        'status' => \App\Enums\OutboundMessageStatus::class,
         'payload' => 'array',
         'scheduled_at' => 'datetime',
         'sent_at' => 'datetime',

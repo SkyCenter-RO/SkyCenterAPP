@@ -13,6 +13,7 @@ class AutomationWebhookLog extends Model
     ];
 
     protected $casts = [
+        'status' => \App\Enums\AutomationWebhookLogStatus::class,
         'http_status' => 'integer',
         'payload' => 'array',
         'response_body' => 'array',

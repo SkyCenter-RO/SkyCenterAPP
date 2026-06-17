@@ -16,6 +16,7 @@ class RentVehicle extends Model
     ];
 
     protected $casts = [
+        'status' => \App\Enums\RentVehicleStatus::class,
         'manufacture_year' => 'integer',
         'insurance_start_date' => 'date',
         'insurance_end_date' => 'date',

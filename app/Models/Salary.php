@@ -12,6 +12,7 @@ class Salary extends Model
     ];
 
     protected $casts = [
+        'status' => \App\Enums\SalaryStatus::class,
         'amount' => 'decimal:2',
         'period_month' => 'date',
         'paid_at' => 'datetime',

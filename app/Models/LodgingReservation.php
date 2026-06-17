@@ -14,6 +14,7 @@ class LodgingReservation extends Model
     ];
 
     protected $casts = [
+        'status' => \App\Enums\LodgingReservationStatus::class,
         'check_in' => 'date',
         'check_out' => 'date',
         'review_request_sent' => 'boolean',

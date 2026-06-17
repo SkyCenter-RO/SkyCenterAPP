@@ -15,6 +15,7 @@ class RentContract extends Model
     ];
 
     protected $casts = [
+        'status' => \App\Enums\RentContractStatus::class,
         'start_date' => 'date',
         'end_date' => 'date',
         'km_at_handover' => 'integer',
