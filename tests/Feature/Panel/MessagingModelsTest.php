@@ -38,7 +38,7 @@ class MessagingModelsTest extends TestCase
         ]);
 
         $this->assertTrue($template->is_active);
-        $this->assertSame('pending', $outbound->status);
+        $this->assertSame('pending', $outbound->status->value);
         $this->assertSame($log->id, $event->webhookLog->id);
         $this->assertSame(1, $log->events()->count());
     }

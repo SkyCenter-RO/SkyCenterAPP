@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\RentVehicleStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -16,6 +17,7 @@ class RentVehicle extends Model
     ];
 
     protected $casts = [
+        'status' => RentVehicleStatus::class,
         'manufacture_year' => 'integer',
         'insurance_start_date' => 'date',
         'insurance_end_date' => 'date',

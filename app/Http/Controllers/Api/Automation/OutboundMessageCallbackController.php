@@ -15,7 +15,7 @@ class OutboundMessageCallbackController extends Controller
 {
     public function __invoke(Request $request, OutboundMessage $outboundMessage): JsonResponse
     {
-        if ($outboundMessage->status !== 'pending') {
+        if ($outboundMessage->status !== \App\Enums\OutboundMessageStatus::PENDING) {
             return response()->json(['status' => 'ok']);
         }
 

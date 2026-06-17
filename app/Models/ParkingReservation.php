@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ParkingReservationStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -17,6 +18,7 @@ class ParkingReservation extends Model
     ];
 
     protected $casts = [
+        'status' => ParkingReservationStatus::class,
         'check_in_at' => 'datetime',
         'check_out_at' => 'datetime',
         'source_created_at' => 'datetime',

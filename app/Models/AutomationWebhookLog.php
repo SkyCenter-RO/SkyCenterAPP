@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\AutomationWebhookLogStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -13,6 +14,7 @@ class AutomationWebhookLog extends Model
     ];
 
     protected $casts = [
+        'status' => AutomationWebhookLogStatus::class,
         'http_status' => 'integer',
         'payload' => 'array',
         'response_body' => 'array',

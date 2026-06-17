@@ -64,4 +64,29 @@ class RenderMessageTemplateTest extends TestCase
 
         $this->assertNull($result);
     }
+
+    public function test_strips_unresolved_placeholders(): void
+    {
+        MessageTemplate::create([
+            'source' => 'manual',
+            'template_key' => 'confirmation',
+            'service' => 'parking',
+            'channel' => 'whatsapp',
+            'locale' => 'ro',
+            'label' => 'Confirmare parcare',
+            'body' => 'Buna {{name}}, auto {{plate}}.',
+            'is_active' => true,
+        ]);
+
+        $action = new RenderMessageTemplate;
+
+        $result = $action->handle('parking', 'confirmation', [
+            'name' => 'Ion',
+        ]);
+
+        $this->assertSame([
+            'channel' => 'whatsapp',
+            'text' => 'Buna Ion, auto .',
+        ], $result);
+    }
 }

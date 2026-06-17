@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Salaries\Schemas;
 
+use App\Enums\SalaryStatus;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
@@ -27,9 +28,10 @@ class SalaryForm
                 DatePicker::make('period_month')
                     ->required(),
                 DateTimePicker::make('paid_at'),
-                TextInput::make('status')
+                Select::make('status')
+                    ->options(SalaryStatus::class)
                     ->required()
-                    ->default('pending'),
+                    ->default(SalaryStatus::PENDING),
                 Textarea::make('notes')
                     ->columnSpanFull(),
             ]);

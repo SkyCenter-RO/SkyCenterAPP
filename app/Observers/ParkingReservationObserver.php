@@ -22,7 +22,7 @@ class ParkingReservationObserver
             ]);
         }
 
-        if ($reservation->status === 'booked') {
+        if ($reservation->status === \App\Enums\ParkingReservationStatus::BOOKED) {
             $this->queueConfirmation->handleParking($reservation);
         }
     }
@@ -40,8 +40,8 @@ class ParkingReservationObserver
         }
 
         if ($reservation->wasChanged('status')
-            && $reservation->status === 'booked'
-            && $reservation->getOriginal('status') !== 'booked') {
+            && $reservation->status === \App\Enums\ParkingReservationStatus::BOOKED
+            && $reservation->getOriginal('status') !== \App\Enums\ParkingReservationStatus::BOOKED->value) {
             $this->queueConfirmation->handleParking($reservation);
         }
     }

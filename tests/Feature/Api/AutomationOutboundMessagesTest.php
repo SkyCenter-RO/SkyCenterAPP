@@ -79,7 +79,7 @@ class AutomationOutboundMessagesTest extends TestCase
         $response->assertJson(['status' => 'ok']);
 
         $message->refresh();
-        $this->assertSame('sent', $message->status);
+        $this->assertSame('sent', $message->status->value);
         $this->assertNotNull($message->sent_at);
 
         $this->assertDatabaseHas('automation_events', [
@@ -103,7 +103,7 @@ class AutomationOutboundMessagesTest extends TestCase
         $response->assertOk();
 
         $message->refresh();
-        $this->assertSame('failed', $message->status);
+        $this->assertSame('failed', $message->status->value);
         $this->assertSame('WhatsApp API timeout', $message->payload['error_message']);
 
         $this->assertDatabaseHas('automation_events', [

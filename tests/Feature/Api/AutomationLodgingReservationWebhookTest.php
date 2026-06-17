@@ -48,11 +48,11 @@ class AutomationLodgingReservationWebhookTest extends TestCase
             ->where('source', 'booking_com')->where('external_id', 'BDC-555')->first();
         $this->assertNotNull($reservation);
         $this->assertNull($reservation->room_id);
-        $this->assertSame('pending', $reservation->status);
+        $this->assertSame('pending', $reservation->status->value);
         $this->assertSame('John Smith', $reservation->guest_name);
 
         $log = AutomationWebhookLog::query()->where('external_id', 'BDC-555')->first();
-        $this->assertSame('processed', $log->status);
+        $this->assertSame('processed', $log->status->value);
 
         $event = AutomationEvent::query()->where('external_id', 'BDC-555')->first();
         $this->assertSame('reservation_created', $event->event_type);
@@ -106,7 +106,7 @@ class AutomationLodgingReservationWebhookTest extends TestCase
         $this->assertSame(0, LodgingReservation::query()->count());
 
         $log = AutomationWebhookLog::query()->latest('id')->first();
-        $this->assertSame('error', $log->status);
+        $this->assertSame('error', $log->status->value);
         $this->assertSame(422, $log->http_status);
     }
 

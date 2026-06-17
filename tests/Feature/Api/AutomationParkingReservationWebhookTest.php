@@ -58,13 +58,13 @@ class AutomationParkingReservationWebhookTest extends TestCase
         $reservation = ParkingReservation::query()
             ->where('source', 'parcare_form')->where('external_id', 'FORM-1001')->first();
         $this->assertNotNull($reservation);
-        $this->assertSame('pending_approval', $reservation->status);
+        $this->assertSame('pending_approval', $reservation->status->value);
         $this->assertSame($customer->id, $reservation->customer_id);
         $this->assertSame($lot->id, $reservation->lot_id);
 
         $log = AutomationWebhookLog::query()->where('external_id', 'FORM-1001')->first();
         $this->assertNotNull($log);
-        $this->assertSame('processed', $log->status);
+        $this->assertSame('processed', $log->status->value);
         $this->assertSame(200, $log->http_status);
 
         $event = AutomationEvent::query()->where('external_id', 'FORM-1001')->first();
@@ -118,7 +118,7 @@ class AutomationParkingReservationWebhookTest extends TestCase
         $this->assertSame(0, ParkingReservation::query()->count());
 
         $log = AutomationWebhookLog::query()->latest('id')->first();
-        $this->assertSame('error', $log->status);
+        $this->assertSame('error', $log->status->value);
         $this->assertSame(422, $log->http_status);
         $this->assertSame('unparsed', $log->event_type);
     }

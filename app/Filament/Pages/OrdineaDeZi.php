@@ -222,6 +222,7 @@ class OrdineaDeZi extends Page
                         ->label('Fișier PDF Program Ture')
                         ->acceptedFileTypes(['application/pdf'])
                         ->required()
+                        ->maxSize(5120)
                         ->disk('local')
                         ->directory('temp-schedules'),
                 ])

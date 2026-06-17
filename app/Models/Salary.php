@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\SalaryStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -12,6 +13,7 @@ class Salary extends Model
     ];
 
     protected $casts = [
+        'status' => SalaryStatus::class,
         'amount' => 'decimal:2',
         'period_month' => 'date',
         'paid_at' => 'datetime',

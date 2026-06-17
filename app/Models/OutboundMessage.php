@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\OutboundMessageStatus;
 use Illuminate\Database\Eloquent\Model;
 
 class OutboundMessage extends Model
@@ -12,6 +13,7 @@ class OutboundMessage extends Model
     ];
 
     protected $casts = [
+        'status' => OutboundMessageStatus::class,
         'payload' => 'array',
         'scheduled_at' => 'datetime',
         'sent_at' => 'datetime',

@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\AutomationWebhookLogs\Schemas;
 
+use App\Enums\AutomationWebhookLogStatus;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
@@ -15,7 +17,8 @@ class AutomationWebhookLogForm
                 TextInput::make('endpoint')
                     ->required(),
                 TextInput::make('idempotency_key'),
-                TextInput::make('status')
+                Select::make('status')
+                    ->options(AutomationWebhookLogStatus::class)
                     ->required(),
                 TextInput::make('http_status')
                     ->required()

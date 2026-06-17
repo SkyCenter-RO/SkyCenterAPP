@@ -6,6 +6,7 @@ use App\Filament\Pages\OrdineaDeZi;
 use App\Models\User;
 use App\Models\WorkShift;
 use Filament\Facades\Filament;
+use Filament\Schemas\Schema;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -51,5 +52,34 @@ class OrdineaDeZiUploadTest extends TestCase
         Livewire::actingAs($operator)
             ->test(OrdineaDeZi::class)
             ->assertActionHidden('uploadSchedule');
+    }
+
+    public function test_uploader_contains_max_size_constraint(): void
+    {
+        $page = new OrdineaDeZi;
+        $refMethod = new \ReflectionMethod($page, 'getHeaderActions');
+        $refMethod->setAccessible(true);
+        $actions = $refMethod->invoke($page);
+
+        $uploadAction = null;
+        foreach ($actions as $action) {
+            if ($action->getName() === 'uploadSchedule') {
+                $uploadAction = $action;
+                break;
+            }
+        }
+
+        $this->assertNotNull($uploadAction);
+        $formComponents = $uploadAction->getSchema(new Schema)->getComponents();
+        $pdfField = null;
+        foreach ($formComponents as $component) {
+            if ($component->getName() === 'schedule_pdf') {
+                $pdfField = $component;
+                break;
+            }
+        }
+
+        $this->assertNotNull($pdfField);
+        $this->assertSame(5120, $pdfField->getMaxSize());
     }
 }
