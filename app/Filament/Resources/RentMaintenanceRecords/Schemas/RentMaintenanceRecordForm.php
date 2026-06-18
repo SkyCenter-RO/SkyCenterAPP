@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\RentMaintenanceRecords\Schemas;
 
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
@@ -13,9 +14,11 @@ class RentMaintenanceRecordForm
     {
         return $schema
             ->components([
-                TextInput::make('rent_vehicle_id')
-                    ->required()
-                    ->numeric(),
+                Select::make('rent_vehicle_id')
+                    ->relationship('vehicle', 'license_plate')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
                 DateTimePicker::make('service_at'),
                 TextInput::make('mileage_at_service')
                     ->numeric(),

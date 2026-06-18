@@ -7,6 +7,7 @@ use App\Filament\Resources\LodgingReservations\Schemas\LodgingReservationForm;
 use App\Filament\Resources\OutboundMessages\Schemas\OutboundMessageForm;
 use App\Filament\Resources\ParkingReservations\Schemas\ParkingReservationForm;
 use App\Filament\Resources\RentContracts\Schemas\RentContractForm;
+use App\Filament\Resources\RentMaintenanceRecords\Schemas\RentMaintenanceRecordForm;
 use App\Filament\Resources\RentVehicles\Schemas\RentVehicleForm;
 use App\Filament\Resources\Salaries\Schemas\SalaryForm;
 use Filament\Forms\Components\Select;
@@ -45,5 +46,17 @@ class FilamentFormsStatusSelectTest extends TestCase
             $this->assertNotNull($field, "Status field missing on {$formClass}");
             $this->assertInstanceOf(Select::class, $field, "Status field on {$formClass} is not a Select");
         }
+    }
+
+    public function test_rent_maintenance_vehicle_field_is_searchable_relation_select(): void
+    {
+        $field = $this->getField(RentMaintenanceRecordForm::class, 'rent_vehicle_id');
+
+        $this->assertNotNull($field);
+        $this->assertInstanceOf(Select::class, $field);
+        $this->assertSame('vehicle', $field->getRelationshipName());
+        $this->assertSame('license_plate', $field->getRelationshipTitleAttribute());
+        $this->assertTrue($field->isSearchable());
+        $this->assertTrue($field->isPreloaded());
     }
 }

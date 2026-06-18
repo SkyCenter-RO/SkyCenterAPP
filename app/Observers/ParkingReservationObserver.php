@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Actions\Messaging\QueueConfirmationMessage;
+use App\Enums\ParkingReservationStatus;
 use App\Models\ParkingReservation;
 use App\Models\ParkingStatusAudit;
 
@@ -12,17 +13,15 @@ class ParkingReservationObserver
 
     public function created(ParkingReservation $reservation): void
     {
-        if ($reservation->status) {
-            ParkingStatusAudit::create([
-                'parking_reservation_id' => $reservation->id,
-                'user_id' => auth()->id() ?? $reservation->updated_by_id ?? $reservation->created_by_id,
-                'from_status' => null,
-                'to_status' => $reservation->status,
-                'changed_at' => now(),
-            ]);
-        }
+        ParkingStatusAudit::create([
+            'parking_reservation_id' => $reservation->id,
+            'user_id' => auth()->id() ?? $reservation->updated_by_id ?? $reservation->created_by_id,
+            'from_status' => null,
+            'to_status' => $reservation->status->value,
+            'changed_at' => now(),
+        ]);
 
-        if ($reservation->status === \App\Enums\ParkingReservationStatus::BOOKED) {
+        if ($reservation->status === ParkingReservationStatus::BOOKED) {
             $this->queueConfirmation->handleParking($reservation);
         }
     }
@@ -34,14 +33,14 @@ class ParkingReservationObserver
                 'parking_reservation_id' => $reservation->id,
                 'user_id' => auth()->id() ?? $reservation->updated_by_id,
                 'from_status' => $reservation->getOriginal('status'),
-                'to_status' => $reservation->status,
+                'to_status' => $reservation->status->value,
                 'changed_at' => now(),
             ]);
         }
 
         if ($reservation->wasChanged('status')
-            && $reservation->status === \App\Enums\ParkingReservationStatus::BOOKED
-            && $reservation->getOriginal('status') !== \App\Enums\ParkingReservationStatus::BOOKED->value) {
+            && $reservation->status === ParkingReservationStatus::BOOKED
+            && $reservation->getOriginal('status') !== ParkingReservationStatus::BOOKED->value) {
             $this->queueConfirmation->handleParking($reservation);
         }
     }

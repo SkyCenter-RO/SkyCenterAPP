@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Automation;
 
+use App\Enums\OutboundMessageStatus;
 use App\Http\Controllers\Controller;
 use App\Models\AutomationEvent;
 use App\Models\AutomationWebhookLog;
@@ -15,7 +16,7 @@ class OutboundMessageCallbackController extends Controller
 {
     public function __invoke(Request $request, OutboundMessage $outboundMessage): JsonResponse
     {
-        if ($outboundMessage->status !== \App\Enums\OutboundMessageStatus::PENDING) {
+        if ($outboundMessage->status !== OutboundMessageStatus::PENDING) {
             return response()->json(['status' => 'ok']);
         }
 
@@ -23,10 +24,10 @@ class OutboundMessageCallbackController extends Controller
         $status = $payload['status'] ?? null;
 
         if ($status === 'sent') {
-            $outboundMessage->status = 'sent';
+            $outboundMessage->status = OutboundMessageStatus::SENT;
             $outboundMessage->sent_at = now();
         } else {
-            $outboundMessage->status = 'failed';
+            $outboundMessage->status = OutboundMessageStatus::FAILED;
             $outboundMessage->payload = array_merge($outboundMessage->payload ?? [], [
                 'error_message' => $payload['error_message'] ?? null,
             ]);

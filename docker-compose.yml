@@ -4,6 +4,8 @@ services:
       context: .
       dockerfile: docker/app/Dockerfile
     working_dir: /var/www/html
+    env_file:
+      - .env
     environment:
       APP_ENV: local
       APP_URL: http://localhost:${APP_PORT:-8080}
@@ -16,7 +18,8 @@ services:
     ports:
       - "${APP_PORT:-8080}:8000"
     volumes:
-      - .:/var/www/html
+      - ./.env:/var/www/html/.env:ro
+      - composer-vendor:/var/www/html/vendor
     depends_on:
       pgsql:
         condition: service_healthy
@@ -27,8 +30,11 @@ services:
       dockerfile: docker/app/Dockerfile
     working_dir: /var/www/html
     command: php artisan queue:work --tries=3 --timeout=90
+    env_file:
+      - .env
     environment:
       APP_ENV: local
+      APP_URL: http://localhost:${APP_PORT:-8080}
       DB_CONNECTION: pgsql
       DB_HOST: pgsql
       DB_PORT: 5432
@@ -36,7 +42,8 @@ services:
       DB_USERNAME: ${DB_USERNAME:-skycenter}
       DB_PASSWORD: ${DB_PASSWORD:-secret}
     volumes:
-      - .:/var/www/html
+      - ./.env:/var/www/html/.env:ro
+      - composer-vendor:/var/www/html/vendor
     depends_on:
       pgsql:
         condition: service_healthy
@@ -61,3 +68,4 @@ services:
 
 volumes:
   pgsql-data:
+  composer-vendor:

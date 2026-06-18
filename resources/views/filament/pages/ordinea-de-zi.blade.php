@@ -87,7 +87,7 @@
                 <div>
                     <h4 class="font-semibold mb-2">Check-in</h4>
                     @forelse ($parkingEvents['checkIns'] as $e)
-                        <div class="text-sm py-1 border-b">{{ $e['label'] }} — {{ $e['detail'] }} <span class="text-gray-400">({{ $e['status'] }})</span></div>
+                        <a href="{{ $e['url'] }}" class="block text-sm py-1 border-b hover:text-primary-600">{{ $e['label'] }} — {{ $e['detail'] }} <span class="text-gray-400">({{ $e['status'] }})</span></a>
                     @empty
                         <div class="text-sm text-gray-400">Niciun check-in.</div>
                     @endforelse
@@ -95,7 +95,7 @@
                 <div>
                     <h4 class="font-semibold mb-2">Check-out</h4>
                     @forelse ($parkingEvents['checkOuts'] as $e)
-                        <div class="text-sm py-1 border-b">{{ $e['label'] }} — {{ $e['detail'] }} <span class="text-gray-400">({{ $e['status'] }})</span></div>
+                        <a href="{{ $e['url'] }}" class="block text-sm py-1 border-b hover:text-primary-600">{{ $e['label'] }} — {{ $e['detail'] }} <span class="text-gray-400">({{ $e['status'] }})</span></a>
                     @empty
                         <div class="text-sm text-gray-400">Niciun check-out.</div>
                     @endforelse
@@ -111,7 +111,7 @@
                 <div>
                     <h4 class="font-semibold mb-2">Sosiri (check-in)</h4>
                     @forelse ($lodgingEvents['checkIns'] as $e)
-                        <div class="text-sm py-1 border-b">{{ $e['guest'] }} — {{ $e['room'] }} <span class="text-gray-400">({{ $e['status'] }})</span></div>
+                        <a href="{{ $e['url'] }}" class="block text-sm py-1 border-b hover:text-primary-600">{{ $e['guest'] }} — {{ $e['room'] }} <span class="text-gray-400">({{ $e['status'] }})</span></a>
                     @empty
                         <div class="text-sm text-gray-400">Nicio sosire.</div>
                     @endforelse
@@ -119,7 +119,7 @@
                 <div>
                     <h4 class="font-semibold mb-2">Plecări (check-out)</h4>
                     @forelse ($lodgingEvents['checkOuts'] as $e)
-                        <div class="text-sm py-1 border-b">{{ $e['guest'] }} — {{ $e['room'] }} <span class="text-gray-400">({{ $e['status'] }})</span></div>
+                        <a href="{{ $e['url'] }}" class="block text-sm py-1 border-b hover:text-primary-600">{{ $e['guest'] }} — {{ $e['room'] }} <span class="text-gray-400">({{ $e['status'] }})</span></a>
                     @empty
                         <div class="text-sm text-gray-400">Nicio plecare.</div>
                     @endforelse
@@ -135,7 +135,7 @@
                 <div>
                     <h4 class="font-semibold mb-2">Preluări (start contract)</h4>
                     @forelse ($rent['checkIns'] as $e)
-                        <div class="text-sm py-1 border-b">{{ $e['client'] }} — {{ $e['vehicle'] }} <span class="text-gray-400">({{ $e['status'] }})</span></div>
+                        <a href="{{ $e['url'] }}" class="block text-sm py-1 border-b hover:text-primary-600">{{ $e['client'] }} — {{ $e['vehicle'] }} <span class="text-gray-400">({{ $e['status'] }})</span></a>
                     @empty
                         <div class="text-sm text-gray-400">Nicio preluare.</div>
                     @endforelse
@@ -143,7 +143,7 @@
                 <div>
                     <h4 class="font-semibold mb-2">Predări (final contract)</h4>
                     @forelse ($rent['checkOuts'] as $e)
-                        <div class="text-sm py-1 border-b">{{ $e['client'] }} — {{ $e['vehicle'] }} <span class="text-gray-400">({{ $e['status'] }})</span></div>
+                        <a href="{{ $e['url'] }}" class="block text-sm py-1 border-b hover:text-primary-600">{{ $e['client'] }} — {{ $e['vehicle'] }} <span class="text-gray-400">({{ $e['status'] }})</span></a>
                     @empty
                         <div class="text-sm text-gray-400">Nicio predare.</div>
                     @endforelse

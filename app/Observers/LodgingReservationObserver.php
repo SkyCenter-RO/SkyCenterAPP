@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Actions\Messaging\QueueConfirmationMessage;
+use App\Enums\LodgingReservationStatus;
 use App\Models\LodgingReservation;
 
 class LodgingReservationObserver
@@ -11,7 +12,7 @@ class LodgingReservationObserver
 
     public function created(LodgingReservation $reservation): void
     {
-        if ($reservation->status === \App\Enums\LodgingReservationStatus::CONFIRMED) {
+        if ($reservation->status === LodgingReservationStatus::CONFIRMED) {
             $this->queueConfirmation->handleLodging($reservation);
         }
     }
@@ -19,8 +20,8 @@ class LodgingReservationObserver
     public function updated(LodgingReservation $reservation): void
     {
         if ($reservation->wasChanged('status')
-            && $reservation->status === \App\Enums\LodgingReservationStatus::CONFIRMED
-            && $reservation->getOriginal('status') !== \App\Enums\LodgingReservationStatus::CONFIRMED->value) {
+            && $reservation->status === LodgingReservationStatus::CONFIRMED
+            && $reservation->getOriginal('status') !== LodgingReservationStatus::CONFIRMED->value) {
             $this->queueConfirmation->handleLodging($reservation);
         }
     }

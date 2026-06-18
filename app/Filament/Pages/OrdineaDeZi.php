@@ -3,6 +3,9 @@
 namespace App\Filament\Pages;
 
 use App\Actions\Scheduling\ParseSchedulePdfAction;
+use App\Filament\Resources\LodgingReservations\LodgingReservationResource;
+use App\Filament\Resources\ParkingReservations\ParkingReservationResource;
+use App\Filament\Resources\RentContracts\RentContractResource;
 use App\Models\LodgingReservation;
 use App\Models\ParkingLot;
 use App\Models\ParkingReservation;
@@ -126,7 +129,7 @@ class OrdineaDeZi extends Page
     }
 
     /**
-     * @return array{checkIns:list<array{guest:string,room:string,status:string}>,checkOuts:list<array{guest:string,room:string,status:string}>}
+     * @return array{checkIns:list<array{guest:string,room:string,status:string,url:string}>,checkOuts:list<array{guest:string,room:string,status:string,url:string}>}
      */
     public function getLodgingEvents(): array
     {
@@ -135,7 +138,8 @@ class OrdineaDeZi extends Page
         $map = fn (LodgingReservation $r): array => [
             'guest' => $r->guest_name ?? 'fără nume',
             'room' => $r->room?->name ?? 'fără cameră',
-            'status' => $r->status ?? '-',
+            'status' => $r->status?->value ?? '-',
+            'url' => LodgingReservationResource::getUrl('edit', ['record' => $r], panel: 'admin'),
         ];
 
         return [
@@ -167,7 +171,7 @@ class OrdineaDeZi extends Page
     }
 
     /**
-     * @return array{checkIns:list<array{client:string,vehicle:string,status:string}>,checkOuts:list<array{client:string,vehicle:string,status:string}>,available:int,total:int}
+     * @return array{checkIns:list<array{client:string,vehicle:string,status:string,url:string}>,checkOuts:list<array{client:string,vehicle:string,status:string,url:string}>,available:int,total:int}
      */
     public function getRentEvents(): array
     {
@@ -176,7 +180,8 @@ class OrdineaDeZi extends Page
         $map = fn (RentContract $c): array => [
             'client' => $c->client?->name ?? 'fără client',
             'vehicle' => $c->vehicle?->license_plate ?? ($c->vehicle?->brand ?? 'fără mașină'),
-            'status' => $c->status ?? '-',
+            'status' => $c->status->value,
+            'url' => RentContractResource::getUrl('edit', ['record' => $c], panel: 'admin'),
         ];
 
         return [
@@ -190,7 +195,7 @@ class OrdineaDeZi extends Page
     }
 
     /**
-     * @return array{checkIns:list<array{label:string,detail:string,status:string}>,checkOuts:list<array{label:string,detail:string,status:string}>}
+     * @return array{checkIns:list<array{label:string,detail:string,status:string,url:string}>,checkOuts:list<array{label:string,detail:string,status:string,url:string}>}
      */
     public function getParkingEvents(): array
     {
@@ -199,7 +204,8 @@ class OrdineaDeZi extends Page
         $map = fn (ParkingReservation $r): array => [
             'label' => $r->plate ?? 'fără număr',
             'detail' => $r->customer?->name ?? 'fără client',
-            'status' => $r->status ?? '-',
+            'status' => $r->status->value,
+            'url' => ParkingReservationResource::getUrl('edit', ['record' => $r], panel: 'admin'),
         ];
 
         return [
