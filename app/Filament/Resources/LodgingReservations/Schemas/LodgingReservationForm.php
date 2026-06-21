@@ -13,13 +13,26 @@ use Filament\Schemas\Schema;
 
 class LodgingReservationForm
 {
+    private const SOURCE_OPTIONS = [
+        'gmail' => 'Email',
+        'booking_com' => 'Booking.com',
+        'airbnb' => 'Airbnb',
+        'direct' => 'Direct',
+    ];
+
+    private const LEGACY_SOURCE_LABELS = [
+        'manual' => 'Manual (legacy)',
+        'booking' => 'Booking (legacy)',
+    ];
+
     public static function configure(Schema $schema): Schema
     {
         return $schema
             ->components([
-                TextInput::make('source')
+                Select::make('source')
+                    ->options(fn (?LodgingReservation $record): array => self::sourceOptions($record))
                     ->required()
-                    ->default('manual'),
+                    ->default('direct'),
                 TextInput::make('external_id'),
                 Select::make('room_id')
                     ->relationship('room', 'name'),
@@ -82,5 +95,16 @@ class LodgingReservationForm
                 TextInput::make('updated_by_id')
                     ->numeric(),
             ]);
+    }
+
+    private static function sourceOptions(?LodgingReservation $record): array
+    {
+        $options = self::SOURCE_OPTIONS;
+
+        if ($record && isset(self::LEGACY_SOURCE_LABELS[$record->source])) {
+            $options[$record->source] = self::LEGACY_SOURCE_LABELS[$record->source];
+        }
+
+        return $options;
     }
 }
