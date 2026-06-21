@@ -15,8 +15,12 @@ class LodgingModelsTest extends TestCase
 
     public function test_property_room_and_reservation_relations(): void
     {
-        $property = LodgingProperty::create(['name' => 'Sky Center', 'is_active' => true]);
-        $room = Room::create(['property_id' => $property->id, 'name' => 'Camera 1', 'is_active' => true]);
+        $property = LodgingProperty::create(['name' => 'Sky Center', 'is_active' => true])->refresh();
+        $room = Room::create(['property_id' => $property->id, 'name' => 'Camera 1', 'is_active' => true])->refresh();
+
+        $this->assertSame('manual', $property->source);
+        $this->assertSame('manual', $room->source);
+
         $reservation = LodgingReservation::create([
             'room_id' => $room->id,
             'guest_name' => 'Maria Ionescu',
