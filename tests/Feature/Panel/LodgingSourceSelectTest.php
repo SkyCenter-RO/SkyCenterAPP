@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Panel;
 
+use App\Filament\Resources\LodgingProperties\Schemas\LodgingPropertyForm;
 use App\Filament\Resources\LodgingReservations\Schemas\LodgingReservationForm;
+use App\Filament\Resources\Rooms\Schemas\RoomForm;
 use App\Models\LodgingReservation;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Component;
@@ -68,6 +70,21 @@ class LodgingSourceSelectTest extends TestCase
         return [
             ['manual', 'Manual (legacy)'],
             ['booking', 'Booking (legacy)'],
+        ];
+    }
+
+    #[DataProvider('formsWithoutSource')]
+    public function test_internal_lodging_configuration_forms_do_not_expose_source(
+        string $formClass,
+    ): void {
+        $this->assertNull($this->getField($formClass, 'source'));
+    }
+
+    public static function formsWithoutSource(): array
+    {
+        return [
+            [LodgingPropertyForm::class],
+            [RoomForm::class],
         ];
     }
 }

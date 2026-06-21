@@ -13,9 +13,6 @@ class LodgingPropertyForm
     {
         return $schema
             ->components([
-                TextInput::make('source')
-                    ->required()
-                    ->default('manual'),
                 TextInput::make('external_id'),
                 TextInput::make('name')
                     ->required(),

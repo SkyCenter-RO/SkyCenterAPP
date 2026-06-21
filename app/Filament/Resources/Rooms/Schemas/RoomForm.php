@@ -14,9 +14,6 @@ class RoomForm
     {
         return $schema
             ->components([
-                TextInput::make('source')
-                    ->required()
-                    ->default('manual'),
                 TextInput::make('external_id'),
                 Select::make('property_id')
                     ->relationship('property', 'name')
